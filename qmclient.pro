@@ -1,0 +1,9 @@
+FORMS += qmclientwidget.ui
+HEADERS += qmclient.h
+SOURCES += qmclient.cpp main.cpp
+RESOURCES += qmclient.qrc
+QMCLIENT = app
+CONFIG += release warn_on thread qt
+TARGET = qmclient
+QT += widgets
+RC_FILE = qmclient.rc
