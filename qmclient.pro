@@ -5,5 +5,5 @@ RESOURCES += qmclient.qrc
 QMCLIENT = app
 CONFIG += release warn_on thread qt
 TARGET = qmclient
-QT += widgets
+QT += widgets network
 RC_FILE = qmclient.rc

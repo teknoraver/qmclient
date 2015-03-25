@@ -1,9 +1,9 @@
 #!/bin/sh
 
-[ "$1" != -s ] && nc -lp 9034 -c "$0 -s"
+[ "$1" != -s ] && while true; do nc -lp 9034 -c "exec $0 -s" ; done
 
 while read line; do
-
+	sleep 1
 	case "$line" in
 	'GETO Device.+')
 		cat <<-EOF
@@ -69,6 +69,9 @@ while read line; do
 		;;
 	'BYE')
 		exit
+		;;
+	*)
+		echo '#ERROR #2'
 		;;
 	esac
 done
