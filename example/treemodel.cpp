@@ -164,43 +164,46 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 }
 //! [8]
 
+void TreeModel::add(QString lineData, int position, TreeItem *parent, QList<TreeItem*> &parents, QList<int> &indentations)
+{
+	if (position > indentations.last()) {
+		// The last child of the current parent is now the new parent
+		// unless the current parent has no children.
+
+		if (parents.last()->childCount() > 0) {
+			parents << parents.last()->child(parents.last()->childCount()-1);
+			indentations << position;
+		}
+	} else {
+		while (position < indentations.last() && parents.count() > 0) {
+			parents.pop_back();
+			indentations.pop_back();
+		}
+	}
+
+	// Append a new item to the current parent's list of children.
+	parents.last()->appendChild(new TreeItem(lineData, parents.last()));
+}
+
 void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 {
-    QList<TreeItem*> parents;
-    QList<int> indentations;
-    parents << parent;
-    indentations << 0;
+	QList<TreeItem*> parents;
+	QList<int> indentations;
+	parents << parent;
+	indentations << 0;
 
-    for (int number = 0; number < lines.count(); number++) {
-	if (lines[number].isEmpty())
-		continue;
-        int position = lines[number].count('.');
+	for (int number = 0; number < lines.count(); number++) {
+		if (lines[number].isEmpty() || lines[number][0] == '#')
+			continue;
 
-	qDebug() << "position" << position;
-	qDebug() << "lines[number]" << lines[number];
-	QStringList token = lines[number].split('.', QString::SkipEmptyParts);
-	qDebug() << "token.size()" << token.size();
-        QString lineData = token[position];
-	qDebug() << "lineData" << lineData;
+		int position = lines[number].count('.');
+		QStringList token = lines[number].split('.', QString::SkipEmptyParts);
 
-        if (!lineData.isEmpty()) {
-            if (position > indentations.last()) {
-                // The last child of the current parent is now the new parent
-                // unless the current parent has no children.
+		//QRegExp numreg("\\d+");
+		QRegExp numreg("1");
+		if(numreg.exactMatch(token[position]))
+			add(token[position - 1], position - 1, parent, parents, indentations);
 
-                if (parents.last()->childCount() > 0) {
-                    parents << parents.last()->child(parents.last()->childCount()-1);
-                    indentations << position;
-                }
-            } else {
-                while (position < indentations.last() && parents.count() > 0) {
-                    parents.pop_back();
-                    indentations.pop_back();
-                }
-            }
-
-            // Append a new item to the current parent's list of children.
-            parents.last()->appendChild(new TreeItem(lineData, parents.last()));
-        }
-    }
+		add(token[position], position, parent, parents, indentations);
+	}
 }

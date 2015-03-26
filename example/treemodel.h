@@ -68,6 +68,7 @@ public:
 
 private:
     void setupModelData(const QStringList &lines, TreeItem *parent);
+    void add(QString obj, int position, TreeItem *parent, QList<TreeItem*> &parents, QList<int> &indentations);
 
     TreeItem *rootItem;
 };

@@ -43,6 +43,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QTreeView>
+#include <QDesktopWidget>
 
 int main(int argc, char *argv[])
 {
@@ -56,6 +57,8 @@ int main(int argc, char *argv[])
     QTreeView view;
     view.setModel(&model);
     view.setWindowTitle(QObject::tr("Simple Tree Model"));
+    view.resize(640, 480);
     view.show();
+    view.move((QApplication::desktop()->screenGeometry(&view).width() - view.width()) / 2, (QApplication::desktop()->screenGeometry(&view).height() - view.height()) / 2);
     return app.exec();
 }
