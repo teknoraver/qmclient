@@ -5,3 +5,4 @@ HEADERS     = treeitem.h \
 SOURCES     = treeitem.cpp \
               treemodel.cpp \
               main.cpp
+CONFIG += debug

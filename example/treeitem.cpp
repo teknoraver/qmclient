@@ -49,7 +49,7 @@
 #include "treeitem.h"
 
 //! [0]
-TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
+TreeItem::TreeItem(const QString &data, TreeItem *parent)
 {
     m_parentItem = parent;
     m_itemData = data;
@@ -87,14 +87,14 @@ int TreeItem::childCount() const
 //! [5]
 int TreeItem::columnCount() const
 {
-    return m_itemData.count();
+    return 1;
 }
 //! [5]
 
 //! [6]
 QVariant TreeItem::data(int column) const
 {
-    return m_itemData.value(column);
+    return m_itemData;
 }
 //! [6]
 

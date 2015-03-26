@@ -49,14 +49,13 @@
 #include "treemodel.h"
 
 #include <QStringList>
+#include <QDebug>
 
 //! [0]
 TreeModel::TreeModel(const QString &data, QObject *parent)
     : QAbstractItemModel(parent)
 {
-    QList<QVariant> rootData;
-    rootData << "Title" << "Summary";
-    rootItem = new TreeItem(rootData);
+    rootItem = new TreeItem("Object");
     setupModelData(data.split(QString("\n")), rootItem);
 }
 //! [0]
@@ -71,10 +70,7 @@ TreeModel::~TreeModel()
 //! [2]
 int TreeModel::columnCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return static_cast<TreeItem*>(parent.internalPointer())->columnCount();
-    else
-        return rootItem->columnCount();
+    return 1;
 }
 //! [2]
 
@@ -175,25 +171,19 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
     parents << parent;
     indentations << 0;
 
-    int number = 0;
+    for (int number = 0; number < lines.count(); number++) {
+	if (lines[number].isEmpty())
+		continue;
+        int position = lines[number].count('.');
 
-    while (number < lines.count()) {
-        int position = 0;
-        while (position < lines[number].length()) {
-            if (lines[number].mid(position, 1) != " ")
-                break;
-            position++;
-        }
-
-        QString lineData = lines[number].mid(position).trimmed();
+	qDebug() << "position" << position;
+	qDebug() << "lines[number]" << lines[number];
+	QStringList token = lines[number].split('.', QString::SkipEmptyParts);
+	qDebug() << "token.size()" << token.size();
+        QString lineData = token[position];
+	qDebug() << "lineData" << lineData;
 
         if (!lineData.isEmpty()) {
-            // Read the column data from the rest of the line.
-            QStringList columnStrings = lineData.split("\t", QString::SkipEmptyParts);
-            QList<QVariant> columnData;
-            for (int column = 0; column < columnStrings.count(); ++column)
-                columnData << columnStrings[column];
-
             if (position > indentations.last()) {
                 // The last child of the current parent is now the new parent
                 // unless the current parent has no children.
@@ -210,9 +200,7 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
             }
 
             // Append a new item to the current parent's list of children.
-            parents.last()->appendChild(new TreeItem(columnData, parents.last()));
+            parents.last()->appendChild(new TreeItem(lineData, parents.last()));
         }
-
-        ++number;
     }
 }
