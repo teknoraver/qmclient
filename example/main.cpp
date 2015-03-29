@@ -1,9 +1,9 @@
-#include "treemodel.h"
-
 #include <QApplication>
 #include <QFile>
 #include <QTreeView>
 #include <QDesktopWidget>
+
+#include "treemodel.h"
 
 int main(int argc, char *argv[])
 {

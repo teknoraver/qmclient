@@ -1,10 +1,10 @@
-#include "treeitem.h"
-#include "treemodel.h"
-
 #include <QStringList>
 #include <QDebug>
 
- TreeModel::TreeModel(const QString & data, QObject * parent):QAbstractItemModel(parent)
+#include "treeitem.h"
+#include "treemodel.h"
+
+TreeModel::TreeModel(const QString & data, QObject * parent):QAbstractItemModel(parent)
 {
 	rootItem = new TreeItem("Object");
 	setupModelData(data.split(QString("\n")), rootItem);

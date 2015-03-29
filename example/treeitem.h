@@ -5,7 +5,7 @@
 #include <QVariant>
 
 class TreeItem {
- public:
+public:
 	TreeItem(const QString & data, TreeItem * parentItem = 0);
 	~TreeItem();
 
@@ -18,8 +18,8 @@ class TreeItem {
 	int row() const;
 	TreeItem *parentItem();
 
- private:
-	 QList < TreeItem * >m_childItems;
+private:
+	QList < TreeItem * >m_childItems;
 	QString m_itemData;
 	TreeItem *m_parentItem;
 };
