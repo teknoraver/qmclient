@@ -1,4 +1,5 @@
 Device
+Device.WiFi
 Device.WiFi.X_ADB_APScan
 Device.WiFi.Radio.1
 Device.WiFi.SSID.1

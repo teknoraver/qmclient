@@ -14,7 +14,7 @@ public:
 	TreeItem *child(int row);
 	int childCount() const;
 	int columnCount() const;
-	QVariant data(int column) const;
+	QVariant data() const;
 	int row() const;
 	TreeItem *parentItem();
 
