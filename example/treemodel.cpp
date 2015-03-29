@@ -1,170 +1,102 @@
-/****************************************************************************
-**
-** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
-** Contact: http://www.qt-project.org/legal
-**
-** This file is part of the examples of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Digia Plc and its Subsidiary(-ies) nor the names
-**     of its contributors may be used to endorse or promote products derived
-**     from this software without specific prior written permission.
-**
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
-
-/*
-    treemodel.cpp
-
-    Provides a simple tree model to show how to create and use hierarchical
-    models.
-*/
-
 #include "treeitem.h"
 #include "treemodel.h"
 
 #include <QStringList>
 #include <QDebug>
 
-//! [0]
-TreeModel::TreeModel(const QString &data, QObject *parent)
-    : QAbstractItemModel(parent)
+ TreeModel::TreeModel(const QString & data, QObject * parent):QAbstractItemModel(parent)
 {
-    rootItem = new TreeItem("Object");
-    setupModelData(data.split(QString("\n")), rootItem);
+	rootItem = new TreeItem("Object");
+	setupModelData(data.split(QString("\n")), rootItem);
 }
-//! [0]
 
-//! [1]
 TreeModel::~TreeModel()
 {
-    delete rootItem;
+	delete rootItem;
 }
-//! [1]
 
-//! [2]
 int TreeModel::columnCount(const QModelIndex &) const
 {
-    return 1;
+	return 1;
 }
-//! [2]
 
-//! [3]
-QVariant TreeModel::data(const QModelIndex &index, int role) const
+QVariant TreeModel::data(const QModelIndex & index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+	if (!index.isValid())
+		return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
+	if (role != Qt::DisplayRole)
+		return QVariant();
 
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+	TreeItem *item = static_cast < TreeItem * >(index.internalPointer());
 
-    return item->data(index.column());
+	return item->data(index.column());
 }
-//! [3]
 
-//! [4]
-Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
+Qt::ItemFlags TreeModel::flags(const QModelIndex & index) const
 {
-    if (!index.isValid())
-        return 0;
+	if (!index.isValid())
+		return 0;
 
-    return QAbstractItemModel::flags(index);
+	return QAbstractItemModel::flags(index);
 }
-//! [4]
 
-//! [5]
-QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
-                               int role) const
+QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return rootItem->data(section);
+	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+		return rootItem->data(section);
 
-    return QVariant();
+	return QVariant();
 }
-//! [5]
 
-//! [6]
-QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
-            const
+QModelIndex TreeModel::index(int row, int column, const QModelIndex & parent) const
 {
-    if (!hasIndex(row, column, parent))
-        return QModelIndex();
+	if (!hasIndex(row, column, parent))
+		return QModelIndex();
 
-    TreeItem *parentItem;
+	TreeItem *parentItem;
 
-    if (!parent.isValid())
-        parentItem = rootItem;
-    else
-        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+	if (!parent.isValid())
+		parentItem = rootItem;
+	else
+		parentItem = static_cast < TreeItem * >(parent.internalPointer());
 
-    TreeItem *childItem = parentItem->child(row);
-    if (childItem)
-        return createIndex(row, column, childItem);
-    else
-        return QModelIndex();
+	TreeItem *childItem = parentItem->child(row);
+	if (childItem)
+		return createIndex(row, column, childItem);
+	else
+		return QModelIndex();
 }
-//! [6]
 
-//! [7]
-QModelIndex TreeModel::parent(const QModelIndex &index) const
+QModelIndex TreeModel::parent(const QModelIndex & index) const
 {
-    if (!index.isValid())
-        return QModelIndex();
+	if (!index.isValid())
+		return QModelIndex();
 
-    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
-    TreeItem *parentItem = childItem->parentItem();
+	TreeItem *childItem = static_cast < TreeItem * >(index.internalPointer());
+	TreeItem *parentItem = childItem->parentItem();
 
-    if (parentItem == rootItem)
-        return QModelIndex();
+	if (parentItem == rootItem)
+		return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+	return createIndex(parentItem->row(), 0, parentItem);
 }
-//! [7]
 
-//! [8]
-int TreeModel::rowCount(const QModelIndex &parent) const
+int TreeModel::rowCount(const QModelIndex & parent) const
 {
-    TreeItem *parentItem;
-    if (parent.column() > 0)
-        return 0;
+	TreeItem *parentItem;
+	if (parent.column() > 0)
+		return 0;
 
-    if (!parent.isValid())
-        parentItem = rootItem;
-    else
-        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+	if (!parent.isValid())
+		parentItem = rootItem;
+	else
+		parentItem = static_cast < TreeItem * >(parent.internalPointer());
 
-    return parentItem->childCount();
+	return parentItem->childCount();
 }
-//! [8]
 
-void TreeModel::add(QString lineData, int position, QList<TreeItem*> &parents, QList<int> &indentations)
+void TreeModel::add(QString lineData, int position, QList < TreeItem * >&parents, QList < int >&indentations)
 {
 	if (position > indentations.last()) {
 		// The last child of the current parent is now the new parent
@@ -185,10 +117,10 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem*> &parents, Q
 	parents.last()->appendChild(new TreeItem(lineData, parents.last()));
 }
 
-void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
+void TreeModel::setupModelData(const QStringList & lines, TreeItem * parent)
 {
-	QList<TreeItem*> parents;
-	QList<int> indentations;
+	QList < TreeItem * >parents;
+	QList < int >indentations;
 	parents << parent;
 	indentations << 0;
 
@@ -201,7 +133,7 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 
 		//QRegExp numreg("\\d+");
 		QRegExp numreg("1");
-		if(numreg.exactMatch(token[position]))
+		if (numreg.exactMatch(token[position]))
 			add(token[position - 1], position - 1, parents, indentations);
 
 		add(token[position], position, parents, indentations);
