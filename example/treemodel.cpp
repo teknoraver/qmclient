@@ -4,10 +4,9 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(const QString &data, QObject *parent):QAbstractItemModel(parent)
+TreeModel::TreeModel(QObject *parent):QAbstractItemModel(parent)
 {
 	rootItem = new TreeItem("Object");
-	setupModelData(data.split(QString("\n")), rootItem);
 }
 
 TreeModel::~TreeModel()
@@ -118,11 +117,11 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 	parents.last()->appendChild(new TreeItem(lineData, parents.last()));
 }
 
-void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
+void TreeModel::setupModelData(const QStringList &lines)
 {
 	QList<TreeItem *>parents;
 	QList<int>indentations;
-	parents << parent;
+	parents << rootItem;
 	indentations << 0;
 
 	for (int number = 0; number < lines.count(); number++) {
@@ -133,7 +132,7 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts);
 
 		for(int i = 0; i < tokens.size(); i++) {
-			if(!parent->find(tokens.mid(0, i + 1)))
+			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
 		}
 	}

@@ -8,10 +8,11 @@
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
+	TreeModel model;
 
 	QFile file("default.txt");
 	file.open(QIODevice::ReadOnly);
-	TreeModel model(file.readAll());
+	model.setupModelData(QString(file.readAll()).split(QString("\n")));
 	file.close();
 
 	QTreeView view;
