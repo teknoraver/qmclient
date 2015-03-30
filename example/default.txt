@@ -1,5 +1,4 @@
 Device
-Device.WiFi
 Device.WiFi.X_ADB_APScan
 Device.WiFi.Radio.1
 Device.WiFi.SSID.1
@@ -10,7 +9,6 @@ Device.WiFi.AccessPoint.1
 Device.WiFi.AccessPoint.2
 Device.WiFi.AccessPoint.3
 Device.WiFi.AccessPoint.4
-Device.Routing
 Device.Routing.Router.1
 Device.Routing.RouteInformation
 Device.Routing.RIP

@@ -98,7 +98,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 
 void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, QList<int>&indentations)
 {
-	qDebug() << "add" << lineData << position;
+	//qDebug() << "add" << lineData << position;
 	if (position > indentations.last()) {
 		// The last child of the current parent is now the new parent
 		// unless the current parent has no children.
@@ -129,15 +129,12 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 		if (lines[number].isEmpty() || lines[number][0] == '#')
 			continue;
 
-		qDebug() << "reading" << lines[number] << indentations.last();
-		QStringList token = lines[number].split('.', QString::SkipEmptyParts);
-		int position = token.size() - 1;
+		//qDebug() << "reading" << lines[number] << indentations.last();
+		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts);
 
-		//QRegExp numreg("\\d+");
-		QRegExp numreg("1");
-		if (numreg.exactMatch(token[position]))
-			add(token[position - 1], position - 1, parents, indentations);
-
-		add(token[position], position, parents, indentations);
+		for(int i = 0; i < tokens.size(); i++) {
+			if(!parent->find(tokens.mid(0, i + 1)))
+				add(tokens[i], i, parents, indentations);
+		}
 	}
 }
