@@ -3,7 +3,7 @@
 
 #include "treeitem.h"
 
-TreeItem::TreeItem(const QString & data, TreeItem * parent)
+TreeItem::TreeItem(const QString &data, TreeItem *parent)
 {
 	m_parentItem = parent;
 	m_itemData = data;
@@ -14,7 +14,7 @@ TreeItem::~TreeItem()
 	qDeleteAll(m_childItems);
 }
 
-void TreeItem::appendChild(TreeItem * item)
+void TreeItem::appendChild(TreeItem *item)
 {
 	m_childItems.append(item);
 }
@@ -47,7 +47,7 @@ TreeItem *TreeItem::parentItem()
 int TreeItem::row() const
 {
 	if (m_parentItem)
-		return m_parentItem->m_childItems.indexOf(const_cast < TreeItem * >(this));
+		return m_parentItem->m_childItems.indexOf(const_cast<TreeItem *>(this));
 
 	return 0;
 }
