@@ -120,14 +120,12 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 void TreeModel::setupModelData(const QStringList &lines)
 {
 	TreeItem *root = rootItem->find(lines[0]);
-	if(!root) {
-		qDebug() << "non trovo" << lines[0];
+	if(!root)
 		root = rootItem;
-	}
 
-	int depth = lines[0].count('.') + 1;
-	if(!root->parentItem())
-		depth = 0;
+	int depth = 0;
+	if(root->parentItem())
+		depth = lines[0].count('.') + 1;
 
 	QList<TreeItem *>parents;
 	QList<int>indentations;
