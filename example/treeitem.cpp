@@ -16,6 +16,7 @@ TreeItem::~TreeItem()
 
 void TreeItem::appendChild(TreeItem *item)
 {
+	item->m_parentItem = this;
 	m_childItems.append(item);
 }
 
@@ -58,10 +59,15 @@ TreeItem* TreeItem::find(QStringList path)
 		return this;
 
 	foreach(TreeItem *child, m_childItems)
-		if(child->data() == path[0]) {
+		if(child->m_itemData == path[0]) {
 			path.removeFirst();
 			return child->find(path);
 		}
 
 	return NULL;
+}
+
+TreeItem* TreeItem::find(QString path)
+{
+	return find(path.split('.'));
 }

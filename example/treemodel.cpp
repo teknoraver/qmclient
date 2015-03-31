@@ -6,7 +6,7 @@
 
 TreeModel::TreeModel(QObject *parent):QAbstractItemModel(parent)
 {
-	rootItem = new TreeItem("Object");
+	rootItem = new TreeItem("Device");
 }
 
 TreeModel::~TreeModel()
@@ -114,25 +114,35 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 	}
 
 	// Append a new item to the current parent's list of children.
-	parents.last()->appendChild(new TreeItem(lineData, parents.last()));
+	parents.last()->appendChild(new TreeItem(lineData));
 }
 
 void TreeModel::setupModelData(const QStringList &lines)
 {
+	TreeItem *root = rootItem->find(lines[0]);
+	if(!root) {
+		qDebug() << "non trovo" << lines[0];
+		root = rootItem;
+	}
+
+	int depth = lines[0].count('.') + 1;
+	if(!root->parentItem())
+		depth = 0;
+
 	QList<TreeItem *>parents;
 	QList<int>indentations;
-	parents << rootItem;
+	parents << root;
 	indentations << 0;
 
-	for (int number = 0; number < lines.count(); number++) {
+	for (int number = 1; number < lines.count(); number++) {
 		if (lines[number].isEmpty() || lines[number][0] == '#')
 			continue;
 
 		//qDebug() << "reading" << lines[number] << indentations.last();
-		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts);
+		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts).mid(depth);
 
 		for(int i = 0; i < tokens.size(); i++) {
-			if(!rootItem->find(tokens.mid(0, i + 1)))
+			if(!root->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
 		}
 	}
