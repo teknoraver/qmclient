@@ -10,7 +10,7 @@
 
 class QmClient: public QMainWindow, private Ui::MainWindow
 {
-	Q_OBJECT
+Q_OBJECT
 public:
 	QmClient();
 	~QmClient();
@@ -22,6 +22,7 @@ private:
 
 private slots:
 	void about();
+	void selectedObject(const QModelIndex&);
 };
 
 #endif

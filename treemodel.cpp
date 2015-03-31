@@ -141,4 +141,5 @@ void TreeModel::setupModelData(const QStringList &lines)
 				add(tokens[i], i, parents, indentations);
 		}
 	}
+	emit layoutChanged();
 }
