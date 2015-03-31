@@ -1,6 +1,6 @@
 FORMS += qmclientwidget.ui
-HEADERS += qmclient.h
-SOURCES += qmclient.cpp main.cpp
+HEADERS += qmclient.h treeitem.h treemodel.h
+SOURCES += qmclient.cpp treeitem.cpp treemodel.cpp main.cpp
 RESOURCES += qmclient.qrc
 QMCLIENT = app
 CONFIG += release warn_on thread qt

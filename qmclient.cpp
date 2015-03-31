@@ -8,10 +8,12 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(actionAbout, SIGNAL(triggered()), SLOT(about()));
 	connect(actionAbout_Qt, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(aboutQt()));
 
+	objects->setModel(&model);
+
 	sock.connectToHost("127.0.0.1", 9034);
 	sock.waitForConnected(-1);
+
 	load("");
-	load("WiFi");
 }
 
 QmClient::~QmClient()
@@ -29,14 +31,14 @@ void QmClient::load(QString path)
 	sock.waitForBytesWritten(-1);
 
 	sock.waitForReadyRead(-1);
-	QString res = sock.readLine();
+	QString res;
+	QStringList lines;
 	while(!(res = sock.readLine()).isEmpty()) {
 		res = res.trimmed();
-		if(!res.startsWith("Device." + path))
-			continue;
-		res = res.remove(QRegularExpression("^Device." + path));
+		lines << res;
 		qDebug() << res;
 	}
+	model.setupModelData(lines);
 }
 
 void QmClient::about()

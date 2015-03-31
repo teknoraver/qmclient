@@ -6,6 +6,8 @@
 
 #include "ui_qmclientwidget.h"
 
+#include "treemodel.h"
+
 class QmClient: public QMainWindow, private Ui::MainWindow
 {
 	Q_OBJECT
@@ -16,6 +18,7 @@ public:
 private:
 	QTcpSocket sock;
 	void load(QString);
+	TreeModel model;
 
 private slots:
 	void about();
