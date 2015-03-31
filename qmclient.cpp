@@ -55,6 +55,7 @@ void QmClient::load(QString path)
 //		qDebug() << res;
 	}
 	model.setupModelData(lines);
+	objects->setExpanded(objects->currentIndex(), true);
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
 	objects->setEnabled(true);
 }
