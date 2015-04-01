@@ -10,6 +10,7 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
+	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(doMenu(const QPoint&)));
 
 	objects->setModel(&objectsModel);
 	leaves->setModel(&leavesModel);
@@ -63,10 +64,10 @@ void QmClient::getObjects()
 
 void QmClient::getLeaves(QString path)
 {
-	qDebug() << "getLeaves" << path;
+	//qDebug() << "getLeaves" << path;
 	// flush pending data, usually zeroes
 	if(sock.bytesAvailable()) {
-		qDebug() << "leftover";
+		//qDebug() << "leftover1";
 		sock.readAll();
 	}
 	sock.write(("GETD " + path + ". 0\n").toUtf8().constData());
@@ -80,20 +81,20 @@ void QmClient::getLeaves(QString path)
 		qApp->processEvents();
 		res = res.trimmed();
 		lines << res;
-		qDebug() << res;
+		//qDebug() << res;
 		sock.waitForReadyRead(0);
 	}
 	lines.sort();
-	qDebug() << lines.size() << "leaves";
+	//qDebug() << lines.size() << "leaves";
 
 	leavesModel.fillData(lines);
 
 	// flush pending data, usually zeroes
 	if(sock.bytesAvailable()) {
-		qDebug() << "leftover";
+		//qDebug() << "leftover2";
 		sock.readAll();
 	}
-	qDebug() << "end";
+	//qDebug() << "end";
 	leaves->resizeColumnsToContents();
 }
 
@@ -115,6 +116,16 @@ void QmClient::doSearch(const QString &text)
 
 	objectsModel.setupModelData(objectList.filter(text, Qt::CaseInsensitive));
 	objects->expandAll();
+}
+
+void QmClient::doMenu(const QPoint &point)
+{
+	QModelIndex index = leaves->indexAt(point);
+	QString val = index.data().toString();
+
+	QMenu menu;
+	menu.addAction("Search " + val);
+	menu.exec(QCursor::pos());
 }
 
 void QmClient::about()
