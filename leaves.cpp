@@ -32,8 +32,10 @@ void Leaves::fillData(QStringList &data)
 
 	foreach(QString leaf, data) {
 		QStringList tokens = leaf.split(';');
-		leaves << tokens[0];
-		values << tokens[1];
+		if(tokens.size() >= 2) {
+			leaves << tokens[0];
+			values << tokens[1];
+		}
 	}
 	emit layoutChanged();
 }
