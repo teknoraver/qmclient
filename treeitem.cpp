@@ -65,8 +65,3 @@ TreeItem* TreeItem::find(QStringList path)
 
 	return NULL;
 }
-
-TreeItem* TreeItem::find(QString path)
-{
-	return find(path.split('.'));
-}

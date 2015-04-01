@@ -18,7 +18,7 @@ public:
 
 private:
 	QTcpSocket sock;
-	void getObjects(QString);
+	void getObjects();
 	void getLeaves(QString);
 	TreeModel objectsModel;
 	Leaves leavesModel;

@@ -31,7 +31,6 @@ void QmClient::selectedObject(const QModelIndex &index)
 	objects->setEnabled(false);
 	leaves->setEnabled(false);
 
-	getObjects(path);
 	getLeaves(path);
 
 	leaves->setEnabled(true);
@@ -39,12 +38,9 @@ void QmClient::selectedObject(const QModelIndex &index)
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-void QmClient::getObjects(QString path)
+void QmClient::getObjects()
 {
-	if(!path.isEmpty())
-		path += '.';
-
-	sock.write(("GETO " + path + "+\n").toUtf8().constData());
+	sock.write(QString("GETO Device.\n").toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 
 	sock.waitForReadyRead(-1);
@@ -86,12 +82,17 @@ void QmClient::getLeaves(QString path)
 		lines << res;
 		qDebug() << res;
 	}
+	qDebug() << lines.size() << "leaves";
 
 	leavesModel.fillData(lines);
 
 	// flush pending data, usually zeroes
-	if(sock.bytesAvailable())
+	if(sock.bytesAvailable()) {
+		qDebug() << "leftover";
 		sock.readAll();
+	}
+	qDebug() << "end";
+	leaves->resizeColumnsToContents();
 }
 
 void QmClient::browseDevice()
@@ -99,7 +100,7 @@ void QmClient::browseDevice()
 	sock.connectToHost(cpeip->text(), 9034);
 	sock.waitForConnected(-1);
 
-	getObjects("Device");
+	getObjects();
 }
 
 void QmClient::about()

@@ -117,29 +117,20 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 
 void TreeModel::setupModelData(const QStringList &lines)
 {
-	TreeItem *root = rootItem->find(lines[0]);
-	if(!root)
-		root = rootItem;
-
-	int depth = 0;
-	if(root->parentItem())
-		depth = lines[0].count('.') + 1;
-
 	QList<TreeItem *>parents;
 	QList<int>indentations;
-	parents << root;
+	parents << rootItem;
 	indentations << 0;
 
 	for (int number = 1; number < lines.count(); number++) {
 		if (lines[number].isEmpty() || lines[number][0] == '#')
 			continue;
 
-		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts).mid(depth);
+		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts);
 
-		for(int i = 0; i < tokens.size(); i++) {
-			if(!root->find(tokens.mid(0, i + 1)))
+		for(int i = 0; i < tokens.size(); i++)
+			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
-		}
 	}
 	emit layoutChanged();
 }
