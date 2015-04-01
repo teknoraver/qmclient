@@ -5,7 +5,7 @@
 
 TreeModel::TreeModel(QObject *parent):QAbstractItemModel(parent)
 {
-	rootItem = new TreeItem("Device");
+	rootItem = NULL;
 }
 
 TreeModel::~TreeModel()
@@ -83,7 +83,7 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
 int TreeModel::rowCount(const QModelIndex &parent) const
 {
 	TreeItem *parentItem;
-	if (parent.column() > 0)
+	if (!rootItem || parent.column() > 0)
 		return 0;
 
 	if (!parent.isValid())
@@ -117,12 +117,16 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 
 void TreeModel::setupModelData(const QStringList &lines)
 {
+	if(rootItem)
+		delete rootItem;
+
+	rootItem = new TreeItem("Device");
 	QList<TreeItem *>parents;
 	QList<int>indentations;
 	parents << rootItem;
 	indentations << 0;
 
-	for (int number = 1; number < lines.count(); number++) {
+	for (int number = 0; number < lines.count(); number++) {
 		if (lines[number].isEmpty() || lines[number][0] == '#')
 			continue;
 

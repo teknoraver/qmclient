@@ -9,6 +9,7 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(actionAbout_Qt, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(aboutQt()));
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
+	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
 
 	objects->setModel(&objectsModel);
 	leaves->setModel(&leavesModel);
@@ -45,23 +46,19 @@ void QmClient::getObjects()
 
 	sock.waitForReadyRead(-1);
 	QString res;
-	QStringList lines;
 	while(!(res = sock.readLine()).isEmpty()) {
 		qApp->processEvents();
 		res = res.trimmed();
-		lines << res;
+		objectList << res;
 		sock.waitForReadyRead(0);
 	}
-	lines.sort();
+	objectList.sort();
 
 	// flush pending data, usually zeroes
 	if(sock.bytesAvailable())
 		sock.readAll();
 
-	if(lines.size() > 1)
-		objectsModel.setupModelData(lines);
-
-	objects->setExpanded(objects->currentIndex(), true);
+	objectsModel.setupModelData(objectList);
 }
 
 void QmClient::getLeaves(QString path)
@@ -106,6 +103,23 @@ void QmClient::browseDevice()
 	sock.waitForConnected(-1);
 
 	getObjects();
+}
+
+void QmClient::doSearch(const QString &text)
+{
+	if(text.isEmpty()) {
+		objectsModel.setupModelData(objectList);
+		objects->collapseAll();
+		return;
+	}
+
+	QStringList found;
+	foreach(QString o, objectList) {
+		if(o.contains(text, Qt::CaseInsensitive))
+			found << o;
+	}
+	objectsModel.setupModelData(found);
+	objects->expandAll();
 }
 
 void QmClient::about()

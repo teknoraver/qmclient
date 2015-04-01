@@ -22,10 +22,12 @@ private:
 	void getLeaves(QString);
 	TreeModel objectsModel;
 	Leaves leavesModel;
+	QStringList objectList;
 
 private slots:
 	void selectedObject(const QModelIndex&);
 	void browseDevice();
+	void doSearch(const QString&);
 	void about();
 };
 
