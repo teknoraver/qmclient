@@ -124,8 +124,13 @@ void QmClient::doMenu(const QPoint &point)
 	QString val = index.data().toString();
 
 	QMenu menu;
-	menu.addAction("Search " + val);
-	menu.exec(QCursor::pos());
+
+	QAction *searchAct = new QAction("Search " + val, &menu);
+	menu.addAction(searchAct);
+
+	QAction *a = menu.exec(QCursor::pos());
+	if(a == searchAct)
+		search->setText(val);
 }
 
 void QmClient::about()
