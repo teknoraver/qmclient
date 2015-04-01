@@ -3,7 +3,7 @@
 [ "$1" != -s ] && while true; do nc -lp 9034 -c "exec $0 -s" ; done
 
 while read line; do
-	sleep 1
+	sleep .2
 	case "$line" in
 	'GETO Device.+')
 		cat <<-EOF
@@ -11,6 +11,11 @@ while read line; do
 			Device.WiFi
 			Device.Routing
 			Device.Firewall
+		EOF
+		;;
+	'GETD Device. 0')
+		cat <<-EOF
+			Device.InterfaceStackNumberOfEntries;53
 		EOF
 		;;
 	'GETO Device.WiFi.+')
@@ -46,6 +51,7 @@ while read line; do
 		;;
 	'GETD Device.Routing. 0')
 		cat <<-EOF
+			Device.Routing.RouterNumberOfEntries;0
 		EOF
 		;;
 	'GETO Device.Firewall.+')

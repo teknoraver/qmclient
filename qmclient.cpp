@@ -10,7 +10,8 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 
-	objects->setModel(&model);
+	objects->setModel(&objectsModel);
+	leaves->setModel(&leavesModel);
 }
 
 QmClient::~QmClient()
@@ -26,14 +27,20 @@ void QmClient::selectedObject(const QModelIndex &index)
 		i = i.parent();
 	}
 
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	objects->setEnabled(false);
+	leaves->setEnabled(false);
+
 	getObjects(path);
 	getLeaves(path);
+
+	leaves->setEnabled(true);
+	objects->setEnabled(true);
+	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 void QmClient::getObjects(QString path)
 {
-	objects->setEnabled(false);
-	QApplication::setOverrideCursor(Qt::WaitCursor);
 	if(!path.isEmpty())
 		path += '.';
 
@@ -54,16 +61,37 @@ void QmClient::getObjects(QString path)
 		sock.readAll();
 
 	if(lines.size() > 1)
-		model.setupModelData(lines);
+		objectsModel.setupModelData(lines);
 
 	objects->setExpanded(objects->currentIndex(), true);
-	QApplication::setOverrideCursor(Qt::ArrowCursor);
-	objects->setEnabled(true);
 }
 
 void QmClient::getLeaves(QString path)
 {
 	qDebug() << "getLeaves" << path;
+	// flush pending data, usually zeroes
+	if(sock.bytesAvailable()) {
+		qDebug() << "leftover";
+		sock.readAll();
+	}
+	sock.write(("GETD " + path + ". 0\n").toUtf8().constData());
+	sock.waitForBytesWritten(-1);
+
+	sock.waitForReadyRead(-1);
+	QString res;
+	QStringList lines;
+	while(!(res = sock.readLine()).isEmpty()) {
+		qApp->processEvents();
+		res = res.trimmed();
+		lines << res;
+		qDebug() << res;
+	}
+
+	leavesModel.fillData(lines);
+
+	// flush pending data, usually zeroes
+	if(sock.bytesAvailable())
+		sock.readAll();
 }
 
 void QmClient::browseDevice()

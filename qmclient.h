@@ -7,6 +7,7 @@
 #include "ui_qmclientwidget.h"
 
 #include "treemodel.h"
+#include "leaves.h"
 
 class QmClient: public QMainWindow, private Ui::MainWindow
 {
@@ -19,7 +20,8 @@ private:
 	QTcpSocket sock;
 	void getObjects(QString);
 	void getLeaves(QString);
-	TreeModel model;
+	TreeModel objectsModel;
+	Leaves leavesModel;
 
 private slots:
 	void selectedObject(const QModelIndex&);
