@@ -5,21 +5,12 @@
 while read line; do
 	sleep .2
 	case "$line" in
-	'GETO Device.+')
+	'GETO Device.')
 		cat <<-EOF
 			Device
 			Device.WiFi
 			Device.Routing
 			Device.Firewall
-		EOF
-		;;
-	'GETD Device. 0')
-		cat <<-EOF
-			Device.InterfaceStackNumberOfEntries;53
-		EOF
-		;;
-	'GETO Device.WiFi.+')
-		cat <<-EOF
 			Device.WiFi
 			Device.WiFi.X_ADB_APScan
 			Device.WiFi.Radio.1
@@ -31,6 +22,18 @@ while read line; do
 			Device.WiFi.AccessPoint.2
 			Device.WiFi.AccessPoint.3
 			Device.WiFi.AccessPoint.4
+			Device.Routing
+			Device.Routing.Router.1
+			Device.Routing.RouteInformation
+			Device.Routing.RIP
+			Device.Firewall
+			Device.Firewall.Chain.1
+			Device.Firewall.Chain.2
+		EOF
+		;;
+	'GETD Device. 0')
+		cat <<-EOF
+			Device.InterfaceStackNumberOfEntries;53
 		EOF
 		;;
 	'GETD Device.WiFi. 0')
@@ -41,24 +44,9 @@ while read line; do
 			Device.WiFi.SSIDNumberOfEntries;4
 		EOF
 		;;
-	'GETO Device.Routing.+')
-		cat <<-EOF
-			Device.Routing
-			Device.Routing.Router.1
-			Device.Routing.RouteInformation
-			Device.Routing.RIP
-		EOF
-		;;
 	'GETD Device.Routing. 0')
 		cat <<-EOF
 			Device.Routing.RouterNumberOfEntries;0
-		EOF
-		;;
-	'GETO Device.Firewall.+')
-		cat <<-EOF
-			Device.Firewall
-			Device.Firewall.Chain.1
-			Device.Firewall.Chain.2
 		EOF
 		;;
 	'GETD Device.Firewall. 0')
