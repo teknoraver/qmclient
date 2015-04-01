@@ -26,11 +26,11 @@ void QmClient::selectedObject(const QModelIndex &index)
 		i = i.parent();
 	}
 
-//	qDebug() << "load" << path;
-	load(path);
+	getObjects(path);
+	getLeaves(path);
 }
 
-void QmClient::load(QString path)
+void QmClient::getObjects(QString path)
 {
 	objects->setEnabled(false);
 	QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -61,12 +61,17 @@ void QmClient::load(QString path)
 	objects->setEnabled(true);
 }
 
+void QmClient::getLeaves(QString path)
+{
+	qDebug() << "getLeaves" << path;
+}
+
 void QmClient::browseDevice()
 {
 	sock.connectToHost(cpeip->text(), 9034);
 	sock.waitForConnected(-1);
 
-	load("Device");
+	getObjects("Device");
 }
 
 void QmClient::about()
