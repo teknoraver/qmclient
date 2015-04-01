@@ -50,7 +50,9 @@ void QmClient::getObjects()
 		qApp->processEvents();
 		res = res.trimmed();
 		lines << res;
+		sock.waitForReadyRead(0);
 	}
+	lines.sort();
 
 	// flush pending data, usually zeroes
 	if(sock.bytesAvailable())
@@ -76,12 +78,15 @@ void QmClient::getLeaves(QString path)
 	sock.waitForReadyRead(-1);
 	QString res;
 	QStringList lines;
+
 	while(!(res = sock.readLine()).isEmpty()) {
 		qApp->processEvents();
 		res = res.trimmed();
 		lines << res;
 		qDebug() << res;
+		sock.waitForReadyRead(0);
 	}
+	lines.sort();
 	qDebug() << lines.size() << "leaves";
 
 	leavesModel.fillData(lines);
