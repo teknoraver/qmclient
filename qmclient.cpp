@@ -8,13 +8,9 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(actionAbout, SIGNAL(triggered()), SLOT(about()));
 	connect(actionAbout_Qt, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(aboutQt()));
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
+	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 
 	objects->setModel(&model);
-
-	sock.connectToHost("127.0.0.1", 9034);
-	sock.waitForConnected(-1);
-
-	load("Device");
 }
 
 QmClient::~QmClient()
@@ -41,8 +37,6 @@ void QmClient::load(QString path)
 	if(!path.isEmpty())
 		path += '.';
 
-//	qDebug() << "getting" << path;
-
 	sock.write(("GETO " + path + "+\n").toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 
@@ -50,14 +44,29 @@ void QmClient::load(QString path)
 	QString res;
 	QStringList lines;
 	while(!(res = sock.readLine()).isEmpty()) {
+		qApp->processEvents();
 		res = res.trimmed();
 		lines << res;
-//		qDebug() << res;
 	}
-	model.setupModelData(lines);
+
+	// flush pending data, usually zeroes
+	if(sock.bytesAvailable())
+		sock.readAll();
+
+	if(lines.size() > 1)
+		model.setupModelData(lines);
+
 	objects->setExpanded(objects->currentIndex(), true);
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
 	objects->setEnabled(true);
+}
+
+void QmClient::browseDevice()
+{
+	sock.connectToHost(cpeip->text(), 9034);
+	sock.waitForConnected(-1);
+
+	load("Device");
 }
 
 void QmClient::about()

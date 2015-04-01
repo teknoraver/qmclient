@@ -21,8 +21,9 @@ private:
 	TreeModel model;
 
 private slots:
-	void about();
 	void selectedObject(const QModelIndex&);
+	void browseDevice();
+	void about();
 };
 
 #endif
