@@ -19,45 +19,43 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
+    <item row="0" column="0">
      <widget class="QLineEdit" name="cpeip">
       <property name="text">
        <string>192.168.1.1</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
+    <item row="0" column="1">
      <widget class="QPushButton" name="browse">
       <property name="text">
        <string>&amp;Browse</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QTreeView" name="objects">
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
-      </property>
-      <attribute name="headerVisible">
-       <bool>false</bool>
-      </attribute>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="2">
-     <widget class="QTableView" name="leaves">
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-     </widget>
+    <item row="1" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QTreeView" name="objects">
+        <attribute name="headerVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableView" name="leaves">
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <attribute name="horizontalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
