@@ -113,12 +113,7 @@ void QmClient::doSearch(const QString &text)
 		return;
 	}
 
-	QStringList found;
-	foreach(QString o, objectList) {
-		if(o.contains(text, Qt::CaseInsensitive))
-			found << o;
-	}
-	objectsModel.setupModelData(found);
+	objectsModel.setupModelData(objectList.filter(text, Qt::CaseInsensitive));
 	objects->expandAll();
 }
 
