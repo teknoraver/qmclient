@@ -1,4 +1,0 @@
-Device
-Device.WiFi
-Device.Routing
-Device.Firewall

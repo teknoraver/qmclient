@@ -1,4 +1,0 @@
-Device.Routing
-Device.Routing.Router.1
-Device.Routing.RouteInformation
-Device.Routing.RIP

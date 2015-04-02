@@ -1,3 +1,0 @@
-Device.Firewall
-Device.Firewall.Chain.1
-Device.Firewall.Chain.2
