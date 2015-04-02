@@ -103,6 +103,7 @@ void QmClient::browseDevice()
 {
 	sock.connectToHost(cpeip->text(), 9034);
 	sock.waitForConnected(-1);
+	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
 	getObjects();
 }
