@@ -13,11 +13,13 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(doMenu(const QPoint&)));
 
 	leaves->setModel(&leavesModel);
+	objectsModel = NULL;
 }
 
 QmClient::~QmClient()
 {
-	delete objectsModel;
+	if(objectsModel)
+		delete objectsModel;
 }
 
 void QmClient::selectedObject(const QModelIndex &index)
