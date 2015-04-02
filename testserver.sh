@@ -68,4 +68,5 @@ while read line; do
 		echo '#ERROR #2'
 		;;
 	esac
+	printf '\0'
 done
