@@ -3,9 +3,9 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(QObject *parent):QAbstractItemModel(parent)
+TreeModel::TreeModel(const QStringList &lines, QObject *parent):QAbstractItemModel(parent)
 {
-	rootItem = NULL;
+	setupModelData(lines);
 }
 
 TreeModel::~TreeModel()
@@ -117,9 +117,6 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 
 void TreeModel::setupModelData(const QStringList &lines)
 {
-	if(rootItem)
-		delete rootItem;
-
 	rootItem = new TreeItem("Device");
 	QList<TreeItem *>parents;
 	QList<int>indentations;
@@ -136,5 +133,4 @@ void TreeModel::setupModelData(const QStringList &lines)
 			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
 	}
-	emit layoutChanged();
 }

@@ -10,7 +10,7 @@
 class TreeModel:public QAbstractItemModel {
 Q_OBJECT
 public:
-	TreeModel(QObject *parent = 0);
+	TreeModel(const QStringList &lines, QObject *parent = 0);
 	~TreeModel();
 
 	QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
@@ -20,10 +20,10 @@ public:
 	QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 	int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-	void setupModelData(const QStringList &lines);
 
 private:
 	void add(QString obj, int position, QList<TreeItem *>&parents, QList<int>&indentations);
+	void setupModelData(const QStringList &lines);
 
 	TreeItem *rootItem;
 };

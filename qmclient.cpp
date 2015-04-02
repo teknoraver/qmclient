@@ -12,12 +12,12 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(doMenu(const QPoint&)));
 
-	objects->setModel(&objectsModel);
 	leaves->setModel(&leavesModel);
 }
 
 QmClient::~QmClient()
 {
+	delete objectsModel;
 }
 
 void QmClient::selectedObject(const QModelIndex &index)
@@ -59,7 +59,8 @@ void QmClient::getObjects()
 	if(sock.bytesAvailable())
 		sock.readAll();
 
-	objectsModel.setupModelData(objectList);
+	objectsModel = new TreeModel(objectList);
+	objects->setModel(objectsModel);
 }
 
 void QmClient::getLeaves(QString path)
@@ -109,12 +110,16 @@ void QmClient::browseDevice()
 void QmClient::doSearch(const QString &text)
 {
 	if(text.isEmpty()) {
-		objectsModel.setupModelData(objectList);
+		delete objectsModel;
+		objectsModel = new TreeModel(objectList);
+		objects->setModel(objectsModel);
 		objects->collapseAll();
 		return;
 	}
 
-	objectsModel.setupModelData(objectList.filter(text, Qt::CaseInsensitive));
+	delete objectsModel;
+	objectsModel = new TreeModel(objectList.filter(text, Qt::CaseInsensitive));
+	objects->setModel(objectsModel);
 	objects->expandAll();
 }
 
