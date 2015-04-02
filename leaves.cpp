@@ -49,3 +49,11 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 
 	return flags;
 }
+
+#include <QDebug>
+
+bool Leaves::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+	qDebug() << __func__;
+	return true;
+}

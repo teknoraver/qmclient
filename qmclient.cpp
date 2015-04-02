@@ -11,6 +11,7 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(doMenu(const QPoint&)));
+	connect(&leavesModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), SLOT(editLeaf(const QModelIndex &, const QModelIndex &)));
 
 	leaves->setModel(&leavesModel);
 	objectsModel = NULL;
@@ -118,6 +119,11 @@ void QmClient::doMenu(const QPoint &point)
 	QAction *a = menu.exec(QCursor::pos());
 	if(a == searchAct)
 		search->setText(val);
+}
+
+void QmClient::editLeaf(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+	qDebug() << "edit";
 }
 
 void QmClient::about()

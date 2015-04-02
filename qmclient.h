@@ -30,6 +30,7 @@ private slots:
 	void browseDevice();
 	void doSearch(const QString&);
 	void doMenu(const QPoint&);
+	void editLeaf(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 	void about();
 };
 
