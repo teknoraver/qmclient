@@ -20,6 +20,7 @@ private:
 	QTcpSocket sock;
 	void getObjects();
 	void getLeaves(QString);
+	QStringList getLines(QString cmd);
 	TreeModel *objectsModel;
 	Leaves leavesModel;
 	QStringList objectList;

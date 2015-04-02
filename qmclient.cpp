@@ -40,62 +40,41 @@ void QmClient::selectedObject(const QModelIndex &index)
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-void QmClient::getObjects()
+QStringList QmClient::getLines(QString cmd)
 {
-	sock.write(QString("GETO Device.\n").toUtf8().constData());
+	sock.write(cmd.toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 
-	sock.waitForReadyRead(-1);
-	QString res;
-	while(!(res = sock.readLine()).isEmpty()) {
+	QByteArray buffer;
+	while(true) {
+		sock.waitForReadyRead(1);
+		QByteArray tmp = sock.readAll();
+		if(!tmp.size())
+			continue;
+
+		buffer += tmp;
+		if(!buffer[buffer.size() - 1]) {
+			buffer.resize(buffer.size() - 1);
+			break;
+		}
 		qApp->processEvents();
-		res = res.trimmed();
-		objectList << res;
-		sock.waitForReadyRead(0);
 	}
-	objectList.sort();
+	QStringList ret = QString(buffer).split('\n');
+	ret.sort();
+	return ret;
+}
 
-	// flush pending data, usually zeroes
-	if(sock.bytesAvailable())
-		sock.readAll();
-
+void QmClient::getObjects()
+{
+	objectList = getLines("GETO Device.\n");
 	objectsModel = new TreeModel(objectList);
 	objects->setModel(objectsModel);
 }
 
 void QmClient::getLeaves(QString path)
 {
-	//qDebug() << "getLeaves" << path;
-	// flush pending data, usually zeroes
-	if(sock.bytesAvailable()) {
-		//qDebug() << "leftover1";
-		sock.readAll();
-	}
-	sock.write(("GETD " + path + ". 0\n").toUtf8().constData());
-	sock.waitForBytesWritten(-1);
-
-	sock.waitForReadyRead(-1);
-	QString res;
-	QStringList lines;
-
-	while(!(res = sock.readLine()).isEmpty()) {
-		qApp->processEvents();
-		res = res.trimmed();
-		lines << res;
-		//qDebug() << res;
-		sock.waitForReadyRead(0);
-	}
-	lines.sort();
-	//qDebug() << lines.size() << "leaves";
-
-	leavesModel.fillData(lines);
-
-	// flush pending data, usually zeroes
-	if(sock.bytesAvailable()) {
-		//qDebug() << "leftover2";
-		sock.readAll();
-	}
-	//qDebug() << "end";
+	QStringList l = getLines("GETD " + path + ". 0\n");
+	leavesModel.fillData(l);
 	leaves->resizeColumnsToContents();
 }
 
