@@ -82,8 +82,14 @@ void QmClient::getLeaves(QString path)
 
 void QmClient::browseDevice()
 {
+	// if the CM only binds localhost you may want to run this on the device:
+	// datapipe 192.168.1.1 9034 127.0.0.1 9034
+
 	sock.connectToHost(cpeip->text(), 9034);
-	sock.waitForConnected(-1);
+	if(!sock.waitForConnected(2000)) {
+		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());
+		return;
+	}
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 	leavesModel.setSocket(&sock);
 
