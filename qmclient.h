@@ -20,16 +20,18 @@ private:
 	QTcpSocket sock;
 	void getObjects();
 	void getLeaves(QString);
-	QStringList getLines(QString cmd);
+	QStringList getLines(QString);
 	TreeModel *objectsModel;
 	Leaves leavesModel;
 	QStringList objectList;
 
 private slots:
+	QString getFullPath(const QModelIndex&);
 	void selectedObject(const QModelIndex&);
 	void browseDevice();
 	void doSearch(const QString&);
-	void doMenu(const QPoint&);
+	void objectsMenu(const QPoint&);
+	void leavesMenu(const QPoint&);
 	void about();
 };
 

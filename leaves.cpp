@@ -55,7 +55,7 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 	return flags;
 }
 
-bool Leaves::setData(const QModelIndex &index, const QVariant &value, int role)
+bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)
 {
 	if(sock) {
 		sock->write((QString("SET ") + leaves[index.row()] + ' ' + value.toString() + '\n').toUtf8().constData());

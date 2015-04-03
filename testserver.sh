@@ -61,7 +61,13 @@ while read line; do
 			Device.Firewall.ChainNumberOfEntries;20
 		EOF
 		;;
-	'BYE')
+	SET*|ADD*|DEL*)
+		cat <<-EOF
+			OK
+			OK
+		EOF
+		;;
+	BYE)
 		exit
 		;;
 	*)

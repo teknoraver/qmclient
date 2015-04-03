@@ -10,7 +10,8 @@ QmClient::QmClient() : QMainWindow(0)
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
-	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(doMenu(const QPoint&)));
+	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
+	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
 
 	leaves->setModel(&leavesModel);
 	objectsModel = NULL;
@@ -22,7 +23,7 @@ QmClient::~QmClient()
 		delete objectsModel;
 }
 
-void QmClient::selectedObject(const QModelIndex &index)
+QString QmClient::getFullPath(const QModelIndex &index)
 {
 	QString path = index.data().toString();
 	QModelIndex i = index.parent();
@@ -30,6 +31,12 @@ void QmClient::selectedObject(const QModelIndex &index)
 		path = i.data().toString() + '.' + path;
 		i = i.parent();
 	}
+	return path;
+}
+
+void QmClient::selectedObject(const QModelIndex &index)
+{
+	QString path = getFullPath(index);
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	objects->setEnabled(false);
@@ -44,7 +51,7 @@ void QmClient::selectedObject(const QModelIndex &index)
 
 QStringList QmClient::getLines(QString cmd)
 {
-	sock.write(cmd.toUtf8().constData());
+	sock.write((cmd + '\n').toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 
 	QByteArray buffer;
@@ -68,14 +75,14 @@ QStringList QmClient::getLines(QString cmd)
 
 void QmClient::getObjects()
 {
-	objectList = getLines("GETO Device.\n");
+	objectList = getLines("GETO Device.");
 	objectsModel = new TreeModel(objectList);
 	objects->setModel(objectsModel);
 }
 
 void QmClient::getLeaves(QString path)
 {
-	QStringList l = getLines("GETD " + path + ". 0\n");
+	QStringList l = getLines("GETD " + path + ". 0");
 	leavesModel.fillData(l);
 	leaves->resizeColumnsToContents();
 }
@@ -112,9 +119,36 @@ void QmClient::doSearch(const QString &text)
 	objects->expandAll();
 }
 
-void QmClient::doMenu(const QPoint &point)
+void QmClient::objectsMenu(const QPoint &point)
+{
+	QModelIndex index = objects->indexAt(point);
+	if(!index.isValid())
+		return;
+
+	QString val = index.data().toString();
+
+	QMenu menu;
+
+	QAction *addAct = new QAction("Add", &menu);
+	menu.addAction(addAct);
+
+	QAction *delAct = new QAction("Delete", &menu);
+	menu.addAction(delAct);
+
+	QString path = getFullPath(index);
+	QAction *a = menu.exec(QCursor::pos());
+	if(a == addAct)
+		getLines("ADD " + path);
+	else if(a == delAct)
+		getLines("DEL " + path);
+}
+
+void QmClient::leavesMenu(const QPoint &point)
 {
 	QModelIndex index = leaves->indexAt(point);
+	if(!index.isValid())
+		return;
+
 	QString val = index.data().toString();
 
 	QMenu menu;
