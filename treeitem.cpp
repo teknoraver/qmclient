@@ -19,7 +19,7 @@ void TreeItem::appendChild(TreeItem *item)
 	m_childItems.append(item);
 }
 
-TreeItem *TreeItem::child(int row)
+TreeItem *TreeItem::child(int row) const
 {
 	return m_childItems.value(row);
 }
@@ -39,7 +39,7 @@ QVariant TreeItem::data() const
 	return m_itemData;
 }
 
-TreeItem *TreeItem::parentItem()
+TreeItem *TreeItem::parentItem() const
 {
 	return m_parentItem;
 }

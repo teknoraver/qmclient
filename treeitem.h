@@ -12,12 +12,12 @@ public:
 
 	void appendChild(TreeItem *child);
 
-	TreeItem *child(int row);
+	TreeItem *child(int row) const;
 	int childCount() const;
 	int columnCount() const;
 	QVariant data() const;
 	int row() const;
-	TreeItem* parentItem();
+	TreeItem* parentItem() const;
 	TreeItem* find(QStringList path);
 
 private:

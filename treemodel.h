@@ -22,7 +22,7 @@ public:
 	int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
 private:
-	void add(QString obj, int position, QList<TreeItem *>&parents, QList<int>&indentations);
+	void add(QString obj, int position, QList<TreeItem *>&parents, QList<int>&indentations) const;
 	void setupModelData(const QStringList &lines);
 
 	TreeItem *rootItem;

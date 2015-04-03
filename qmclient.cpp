@@ -23,7 +23,7 @@ QmClient::~QmClient()
 		delete objectsModel;
 }
 
-QString QmClient::getFullPath(const QModelIndex &index)
+QString QmClient::getFullPath(const QModelIndex &index) const
 {
 	QString path = index.data().toString();
 	QModelIndex i = index.parent();
@@ -143,7 +143,7 @@ void QmClient::objectsMenu(const QPoint &point)
 		getLines("DEL " + path);
 }
 
-void QmClient::leavesMenu(const QPoint &point)
+void QmClient::leavesMenu(const QPoint &point) const
 {
 	QModelIndex index = leaves->indexAt(point);
 	if(!index.isValid())

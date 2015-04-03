@@ -94,7 +94,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 	return parentItem->childCount();
 }
 
-void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, QList<int>&indentations)
+void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, QList<int>&indentations) const
 {
 	if (position > indentations.last()) {
 		// The last child of the current parent is now the new parent

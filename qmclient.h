@@ -26,12 +26,12 @@ private:
 	QStringList objectList;
 
 private slots:
-	QString getFullPath(const QModelIndex&);
+	QString getFullPath(const QModelIndex&) const;
 	void selectedObject(const QModelIndex&);
 	void browseDevice();
 	void doSearch(const QString&);
 	void objectsMenu(const QPoint&);
-	void leavesMenu(const QPoint&);
+	void leavesMenu(const QPoint&) const;
 	void about();
 };
 
