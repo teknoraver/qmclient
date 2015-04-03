@@ -1,9 +1,13 @@
 #ifndef LEAVES_H
 #define LEAVES_H
 
+#include <QTcpSocket>
+
 class Leaves : public QAbstractTableModel
 {
 public:
+	Leaves();
+	void setSocket(QTcpSocket *s);
 	void fillData(QStringList &data);
 
 private:
@@ -12,6 +16,7 @@ private:
 	QVariant data(const QModelIndex&, int) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
 	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+	QTcpSocket *sock;
 
 	QStringList leaves;
 	QStringList values;
