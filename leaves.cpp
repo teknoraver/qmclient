@@ -47,7 +47,7 @@ void Leaves::fillData(QStringList &data)
 
 Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 {
-	Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemNeverHasChildren;
+	Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
 	if(index.column() == 1)
 		flags |= Qt::ItemIsEditable;

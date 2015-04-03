@@ -2,6 +2,7 @@
 #define LEAVES_H
 
 #include <QTcpSocket>
+#include <QStringList>
 
 class Leaves : public QAbstractTableModel
 {
