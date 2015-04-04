@@ -2,7 +2,7 @@
 
 #include "qmclient.h"
 
-QmClient::QmClient() : QMainWindow(0)
+QmClient::QmClient()
 {
 	setupUi(this);
 	connect(actionAbout, SIGNAL(triggered()), SLOT(about()));
@@ -15,6 +15,8 @@ QmClient::QmClient() : QMainWindow(0)
 
 	leaves->setModel(&leavesModel);
 	objectsModel = NULL;
+
+	setClearButton(search);
 }
 
 QmClient::~QmClient()

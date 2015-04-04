@@ -6,6 +6,7 @@
 
 #include "ui_qmclientwidget.h"
 
+#include "compat.h"
 #include "treemodel.h"
 #include "leaves.h"
 
