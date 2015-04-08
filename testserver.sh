@@ -61,11 +61,14 @@ while read line; do
 			Device.Firewall.ChainNumberOfEntries;20
 		EOF
 		;;
-	SET*|ADD*|DEL*)
+	SET*|DEL*)
 		cat <<-EOF
 			OK
 			OK
 		EOF
+		;;
+	ADD*)
+		echo $(($(date +%s) & 10))
 		;;
 	BYE)
 		exit

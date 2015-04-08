@@ -70,7 +70,7 @@ QStringList QmClient::getLines(QString cmd)
 		}
 		qApp->processEvents();
 	}
-	QStringList ret = QString(buffer).split('\n');
+	QStringList ret = QString(buffer).split('\n', QString::SkipEmptyParts);
 	ret.sort();
 	return ret;
 }
@@ -93,6 +93,9 @@ void QmClient::browseDevice()
 {
 	// if the CM only binds localhost you may want to run this on the device:
 	// datapipe 192.168.1.1 9034 127.0.0.1 9034
+
+	if(sock.state() != QAbstractSocket::UnconnectedState)
+		sock.close();
 
 	sock.connectToHost(cpeip->text(), 9034);
 	if(!sock.waitForConnected(2000)) {
@@ -139,10 +142,24 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QString path = getFullPath(index);
 	QAction *a = menu.exec(QCursor::pos());
-	if(a == addAct)
-		getLines("ADD " + path);
-	else if(a == delAct)
-		getLines("DEL " + path);
+	if(a == addAct) {
+		QStringList ret = getLines("ADD " + path);
+		if(!ret.contains("ERROR")) {
+			objectList << path + '.' + ret[0];
+			objectList.sort();
+			objects->setModel(new TreeModel(objectList));
+		}
+	} else if(a == delAct) {
+		QStringList ret = getLines("DEL " + path);
+		if(!ret.contains("ERROR")) {
+			QStringList newl;
+			foreach(QString s, objectList)
+				if(!s.startsWith(path))
+					newl << s;
+			objectList = newl;
+			objects->setModel(new TreeModel(objectList));
+		}
+	}
 }
 
 void QmClient::leavesMenu(const QPoint &point) const
