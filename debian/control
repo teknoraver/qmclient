@@ -1,0 +1,12 @@
+Source: qmclient
+Maintainer: Matteo Croce <matteo@openwrt.org>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.6
+Build-Depends: debhelper (>= 9), libqt4-dev | qtbase5-dev, qt4-qmake | qt5-qmake
+
+Package: qmclient
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Qt CM Browser
+ tool to browse and edit CM configuration

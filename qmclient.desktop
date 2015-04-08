@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=QmClient
+Comment=Qt CM Browser
+Exec=qmclient
+Icon=qmclient
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Qt;Utility;
