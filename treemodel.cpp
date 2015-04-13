@@ -21,9 +21,10 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(const QStringList &lines, QObject *parent):QAbstractItemModel(parent)
+TreeModel::TreeModel(Client *c, QObject *parent):QAbstractItemModel(parent)
 {
-	setupModelData(lines);
+	client = c;
+	setupModelData(client->objects);
 }
 
 TreeModel::~TreeModel()

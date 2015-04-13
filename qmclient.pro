@@ -1,9 +1,9 @@
 FORMS += qmclientwidget.ui
-HEADERS += compat.h qmclient.h treeitem.h treemodel.h leaves.h
-SOURCES += main.cpp qmclient.cpp treeitem.cpp treemodel.cpp leaves.cpp
+HEADERS += compat.h qmclient.h treeitem.h treemodel.h leaves.h client.h
+SOURCES += main.cpp qmclient.cpp treeitem.cpp treemodel.cpp leaves.cpp client.cpp
 RESOURCES += qmclient.qrc
 QMCLIENT = app
-CONFIG += release warn_on thread qt
+CONFIG += debug warn_on thread qt
 TARGET = qmclient
 QT += widgets network
 RC_FILE = qmclient.rc

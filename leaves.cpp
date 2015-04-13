@@ -21,9 +21,9 @@
 
 #include "leaves.h"
 
-Leaves::Leaves()
+Leaves::Leaves(Client *c)
 {
-	sock = NULL;
+	client = c;
 }
 
 int Leaves::rowCount(const QModelIndex&) const
@@ -48,11 +48,13 @@ QVariant Leaves::data(const QModelIndex &index, int role) const
 	return QVariant::Invalid;
 }
 
-void Leaves::fillData(QStringList &data)
+void Leaves::loadPath(QString path)
 {
 	leaves.clear();
 	values.clear();
 
+	client->getLeaves(path);
+	QStringList data = leaves;
 	foreach(QString leaf, data) {
 		QStringList tokens = leaf.split(';');
 		if(tokens.size() >= 2) {
@@ -75,34 +77,29 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 
 bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)
 {
-	if(sock) {
-		sock->write((QString("SET ") + leaves[index.row()] + ' ' + value.toString() + '\n').toUtf8().constData());
-		sock->waitForBytesWritten(-1);
+/*
+	sock->write((QString("SET ") + leaves[index.row()] + ' ' + value.toString() + '\n').toUtf8().constData());
+	sock->waitForBytesWritten(-1);
 
-		QByteArray buffer;
-		while(true) {
-			sock->waitForReadyRead(1);
-			QByteArray tmp = sock->readAll();
-			if(!tmp.size())
-				continue;
+	QByteArray buffer;
+	while(true) {
+		sock->waitForReadyRead(1);
+		QByteArray tmp = sock->readAll();
+		if(!tmp.size())
+			continue;
 
-			buffer += tmp;
-			if(!buffer[buffer.size() - 1]) {
-				buffer.resize(buffer.size() - 1);
-				break;
-			}
+		buffer += tmp;
+		if(!buffer[buffer.size() - 1]) {
+			buffer.resize(buffer.size() - 1);
+			break;
+		}
 //			qApp->processEvents();
-		}
-		if(buffer.startsWith("OK")) {
-			values[index.row()] = value.toString();
-			emit dataChanged(index, index);
-			return true;
-		}
 	}
+	if(buffer.startsWith("OK")) {
+		values[index.row()] = value.toString();
+		emit dataChanged(index, index);
+		return true;
+	}
+*/
 	return false;
-}
-
-void Leaves::setSocket(QTcpSocket *s)
-{
-	sock = s;
 }

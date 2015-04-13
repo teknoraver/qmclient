@@ -24,12 +24,15 @@
 #include <QVariant>
 
 #include "treeitem.h"
+#include "client.h"
 
 class TreeModel:public QAbstractItemModel {
 Q_OBJECT
 public:
-	TreeModel(const QStringList &lines, QObject *parent = 0);
+	TreeModel(Client *c, QObject *parent = 0);
 	~TreeModel();
+
+	Client *client;
 
 	QVariant data(const QModelIndex &index, int role) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
