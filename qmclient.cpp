@@ -52,19 +52,32 @@ void QmClient::browseDevice()
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-void QmClient::selectedObject(const QModelIndex&)
+void QmClient::selectedObject(const QModelIndex &index)
 {
 	QString path = getFullPath(index);
+
+	qDebug() << "sel" << path;
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	objects->setEnabled(false);
 	leaves->setEnabled(false);
 
-	client->getLeaves(path);
+	leavesModel->loadPath(path);
 
 	leaves->setEnabled(true);
 	objects->setEnabled(true);
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+QString QmClient::getFullPath(const QModelIndex &index) const
+{
+	QString path = index.data().toString();
+	QModelIndex i = index.parent();
+	while(i.isValid()) {
+		path = i.data().toString() + '.' + path;
+		i = i.parent();
+	}
+	return path;
 }
 
 void QmClient::about()

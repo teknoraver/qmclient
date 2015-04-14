@@ -52,3 +52,29 @@ void Client::getLeaves(QString path)
 {
 	leaves = getLines("GETD " + path + ". 0");
 }
+
+bool Client::setValue(QString leaf, QString value)
+{
+
+	sock.write((QString("SET ") + leaf + ' ' + value + '\n').toUtf8().constData());
+	sock.waitForBytesWritten(-1);
+
+	QByteArray buffer;
+	while(true) {
+		sock.waitForReadyRead(1);
+		QByteArray tmp = sock.readAll();
+		if(!tmp.size())
+			continue;
+
+		buffer += tmp;
+		if(!buffer[buffer.size() - 1]) {
+			buffer.resize(buffer.size() - 1);
+			break;
+		}
+//		qApp->processEvents();
+	}
+	if(buffer.startsWith("OK"))
+		return true;
+
+	return false;
+}

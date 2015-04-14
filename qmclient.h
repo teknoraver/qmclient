@@ -40,6 +40,8 @@ private:
 	Leaves *leavesModel;
 	TreeModel *treeModel;
 
+	QString getFullPath(const QModelIndex &index) const;
+
 private slots:
 	void browseDevice();
 	void selectedObject(const QModelIndex&);

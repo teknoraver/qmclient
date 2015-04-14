@@ -11,6 +11,7 @@ public:
 	QStringList getLines(QString cmd);
 	void getLeaves(QString path);
 	void browseDevice();
+	bool setValue(QString leaf, QString value);
 
 	QStringList objects;
 	QStringList leaves;
