@@ -27,8 +27,8 @@ QmClient::QmClient()
 	connect(actionAbout_Qt, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(aboutQt()));
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
-/*	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
-	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
+	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
+/*	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));*/
 
 	setClearButton(search);
@@ -78,6 +78,18 @@ QString QmClient::getFullPath(const QModelIndex &index) const
 		i = i.parent();
 	}
 	return path;
+}
+
+void QmClient::doSearch(const QString &text)
+{
+	if(text.isEmpty()) {
+		treeModel->filter(QString());
+		objects->collapseAll();
+		return;
+	}
+
+	treeModel->filter(text);
+	objects->expandAll();
 }
 
 void QmClient::about()

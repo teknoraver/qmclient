@@ -6,7 +6,7 @@ Client::Client(QString h)
 	browseDevice();
 }
 
-QStringList Client::getLines(QString cmd)
+QStringList Client::getLines(const QString &cmd)
 {
 	sock.write((cmd + '\n').toUtf8().constData());
 	sock.waitForBytesWritten(-1);
@@ -48,12 +48,12 @@ void Client::browseDevice()
 	objects = getLines("GETO Device.");
 }
 
-void Client::getLeaves(QString path)
+void Client::getLeaves(const QString &path)
 {
 	leaves = getLines("GETD " + path + ". 0");
 }
 
-bool Client::setValue(QString leaf, QString value)
+bool Client::setValue(const QString &leaf, const QString &value)
 {
 
 	sock.write((QString("SET ") + leaf + ' ' + value + '\n').toUtf8().constData());

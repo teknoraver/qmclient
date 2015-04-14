@@ -42,8 +42,9 @@ public:
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+	void filter(const QString &filter);
 private:
-	void add(QString obj, int position, QList<TreeItem *>&parents, QList<int>&indentations) const;
+	void add(const QString &obj, int position, QList<TreeItem *> &parents, QList<int>&indentations) const;
 	void setupModelData(const QStringList &lines);
 
 	TreeItem *rootItem;

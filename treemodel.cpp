@@ -113,7 +113,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 	return parentItem->childCount();
 }
 
-void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, QList<int>&indentations) const
+void TreeModel::add(const QString &lineData, int position, QList<TreeItem *> &parents, QList<int>&indentations) const
 {
 	if (position > indentations.last()) {
 		// The last child of the current parent is now the new parent
@@ -132,6 +132,16 @@ void TreeModel::add(QString lineData, int position, QList<TreeItem *>&parents, Q
 
 	// Append a new item to the current parent's list of children.
 	parents.last()->appendChild(new TreeItem(lineData));
+}
+
+void TreeModel::filter(const QString &filter)
+{
+	if(filter.isEmpty())
+		setupModelData(client->objects);
+	else
+		setupModelData(client->objects.filter(filter, Qt::CaseInsensitive));
+
+	emit layoutChanged();
 }
 
 void TreeModel::setupModelData(const QStringList &lines)

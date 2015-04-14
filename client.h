@@ -8,10 +8,10 @@ class Client
 public:
 	Client(QString host);
 
-	QStringList getLines(QString cmd);
-	void getLeaves(QString path);
+	QStringList getLines(const QString &cmd);
+	void getLeaves(const QString &path);
 	void browseDevice();
-	bool setValue(QString leaf, QString value);
+	bool setValue(const QString &leaf, const QString &value);
 
 	QStringList objects;
 	QStringList leaves;
