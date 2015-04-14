@@ -81,7 +81,7 @@ QString QmClient::getFullPath(const QModelIndex &index) const
 void QmClient::doSearch(const QString &text)
 {
 	if(text.isEmpty()) {
-		treeModel->filter(QString());
+		treeModel->filter();
 		objects->collapseAll();
 		return;
 	}

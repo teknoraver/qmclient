@@ -21,7 +21,7 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(Client *c, QObject *parent):QAbstractItemModel(parent)
+TreeModel::TreeModel(Client *c, QObject *parent) : QAbstractItemModel(parent)
 {
 	client = c;
 	setupModelData(client->objects);
@@ -140,8 +140,6 @@ void TreeModel::filter(const QString &filter)
 		setupModelData(client->objects);
 	else
 		setupModelData(client->objects.filter(filter, Qt::CaseInsensitive));
-
-	emit layoutChanged();
 }
 
 void TreeModel::addObject(const QString &path)

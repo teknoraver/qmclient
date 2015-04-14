@@ -42,7 +42,7 @@ public:
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-	void filter(const QString &filter);
+	void filter(const QString &filter = QString());
 	void addObject(const QString &path);
 	void delObject(const QString &path);
 private:
