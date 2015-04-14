@@ -28,8 +28,8 @@ QmClient::QmClient()
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
-/*	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
-	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));*/
+	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
+//	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
 
 	setClearButton(search);
 }
@@ -90,6 +90,24 @@ void QmClient::doSearch(const QString &text)
 
 	treeModel->filter(text);
 	objects->expandAll();
+}
+
+void QmClient::leavesMenu(const QPoint &point) const
+{
+	QModelIndex index = leaves->indexAt(point);
+	if(!index.isValid())
+		return;
+
+	QString val = index.data().toString();
+
+	QMenu menu;
+
+	QAction *searchAct = new QAction("Search " + val, &menu);
+	menu.addAction(searchAct);
+
+	QAction *a = menu.exec(QCursor::pos());
+	if(a == searchAct)
+		search->setText(val);
 }
 
 void QmClient::about()
