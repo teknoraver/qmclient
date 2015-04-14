@@ -43,6 +43,8 @@ public:
 	int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
 	void filter(const QString &filter);
+	void addObject(const QString &path);
+	void delObject(const QString &path);
 private:
 	void add(const QString &obj, int position, QList<TreeItem *> &parents, QList<int>&indentations) const;
 	void setupModelData(const QStringList &lines);

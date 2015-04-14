@@ -29,7 +29,7 @@ QmClient::QmClient()
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
-//	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
+	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
 
 	setClearButton(search);
 }
@@ -55,8 +55,6 @@ void QmClient::browseDevice()
 void QmClient::selectedObject(const QModelIndex &index)
 {
 	QString path = getFullPath(index);
-
-	qDebug() << "sel" << path;
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	objects->setEnabled(false);
@@ -108,6 +106,31 @@ void QmClient::leavesMenu(const QPoint &point) const
 	QAction *a = menu.exec(QCursor::pos());
 	if(a == searchAct)
 		search->setText(val);
+}
+
+void QmClient::objectsMenu(const QPoint &point)
+{
+	QModelIndex index = objects->indexAt(point);
+	if(!index.isValid())
+		return;
+
+	QString val = index.data().toString();
+
+	QMenu menu;
+
+	QAction *addAct = new QAction("Add", &menu);
+	menu.addAction(addAct);
+
+	QAction *delAct = new QAction("Delete", &menu);
+	menu.addAction(delAct);
+
+	QString path = getFullPath(index);
+	QAction *a = menu.exec(QCursor::pos());
+	if(a == addAct) {
+		treeModel->addObject(path);
+	} else if(a == delAct) {
+		treeModel->delObject(path);
+	}
 }
 
 void QmClient::about()

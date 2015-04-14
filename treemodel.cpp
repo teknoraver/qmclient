@@ -144,6 +144,18 @@ void TreeModel::filter(const QString &filter)
 	emit layoutChanged();
 }
 
+void TreeModel::addObject(const QString &path)
+{
+	if(client->add(path) > 0)
+		setupModelData(client->objects);
+}
+
+void TreeModel::delObject(const QString &path)
+{
+	if(client->del(path))
+		setupModelData(client->objects);
+}
+
 void TreeModel::setupModelData(const QStringList &lines)
 {
 	rootItem = new TreeItem("Device");
@@ -162,4 +174,6 @@ void TreeModel::setupModelData(const QStringList &lines)
 			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
 	}
+
+	emit layoutChanged();
 }

@@ -47,6 +47,7 @@ private slots:
 	void selectedObject(const QModelIndex&);
 	void doSearch(const QString&);
 	void leavesMenu(const QPoint&) const;
+	void objectsMenu(const QPoint&);
 	void about();
 };
 

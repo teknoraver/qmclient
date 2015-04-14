@@ -78,3 +78,26 @@ bool Client::setValue(const QString &leaf, const QString &value)
 
 	return false;
 }
+
+int Client::add(const QString &path)
+{
+	QStringList ret = getLines("ADD " + path);
+	if(!ret.contains("ERROR")) {
+		objects << path + '.' + ret[0];
+		objects.sort();
+		return ret[0].toInt();
+	}
+	return -1;
+}
+
+bool Client::del(const QString &path)
+{
+	QStringList ret = getLines("DEL " + path);
+	if(!ret.contains("ERROR")) {
+		foreach(QString s, objects)
+			if(s.startsWith(path))
+				objects.removeOne(s);
+		return true;
+	}
+	return false;
+}
