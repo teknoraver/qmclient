@@ -68,7 +68,7 @@ while read line; do
 		EOF
 		;;
 	ADD*)
-		echo $(($(date +%s) & 10))
+		echo $(($(date +%s) % 10 + 10))
 		;;
 	BYE)
 		exit
