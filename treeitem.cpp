@@ -37,6 +37,11 @@ void TreeItem::appendChild(TreeItem *item)
 	m_childItems.append(item);
 }
 
+void TreeItem::delChild(int row)
+{
+	delete m_childItems.takeAt(row);
+}
+
 TreeItem *TreeItem::child(int row) const
 {
 	return m_childItems.value(row);

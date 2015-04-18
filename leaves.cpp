@@ -17,7 +17,6 @@
  */
 
 #include <QModelIndex>
-//#include <QDebug>
 
 #include "leaves.h"
 

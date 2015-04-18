@@ -20,7 +20,7 @@
 
 #include "qmclient.h"
 
-QmClient::QmClient()
+QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 {
 	setupUi(this);
 	connect(actionAbout, SIGNAL(triggered()), SLOT(about()));
@@ -36,11 +36,24 @@ QmClient::QmClient()
 
 QmClient::~QmClient()
 {
+	if(client)
+		delete client;
+	if(leavesModel)
+		delete leavesModel;
+	if(treeModel)
+		delete treeModel;
 }
 
 void QmClient::browseDevice()
 {
 	QApplication::setOverrideCursor(Qt::WaitCursor);
+
+	if(client)
+		delete client;
+	if(leavesModel)
+		delete leavesModel;
+	if(treeModel)
+		delete treeModel;
 
 	client = new Client(cpeip->text());
 	leavesModel = new Leaves(client);
@@ -114,8 +127,6 @@ void QmClient::objectsMenu(const QPoint &point)
 	if(!index.isValid())
 		return;
 
-	QString val = index.data().toString();
-
 	QMenu menu;
 
 	QAction *addAct = new QAction("Add", &menu);
@@ -123,13 +134,13 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QAction *delAct = new QAction("Delete", &menu);
 	menu.addAction(delAct);
-	QString path = getFullPath(index);
+
 	QAction *a = menu.exec(QCursor::pos());
-	if(a == addAct) {
+
+	if(a == addAct)
 		treeModel->insertRow(0, index);
-	} else if(a == delAct) {
-		treeModel->delObject(path);
-	}
+	else if(a == delAct)
+		treeModel->removeRow(index.row(), index);
 }
 
 void QmClient::about()

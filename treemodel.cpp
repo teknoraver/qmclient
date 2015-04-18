@@ -142,13 +142,12 @@ void TreeModel::filter(const QString &filter)
 		setupModelData(client->objects.filter(filter, Qt::CaseInsensitive));
 }
 
-bool TreeModel::insertRow(int row, const QModelIndex &parent)
+bool TreeModel::insertRow(int, const QModelIndex &parent)
 {
 	TreeItem *item = getItem(parent);
 	QString path = item->path();
 	int i = client->add(path);
 	if(i > 0) {
-		QString name = path + '.' + QString::number(i);
 		beginInsertRows(parent, 0, 0);
 		item->appendChild(new TreeItem(QString::number(i)));
 		endInsertRows();
@@ -157,10 +156,16 @@ bool TreeModel::insertRow(int row, const QModelIndex &parent)
 	return false;
 }
 
-void TreeModel::delObject(const QString &path)
+bool TreeModel::removeRow(int row, const QModelIndex &parent)
 {
-	if(client->del(path))
-		setupModelData(client->objects);
+	TreeItem *item = getItem(parent);
+	if(client->del(item->path())) {
+		beginRemoveRows(parent.parent(), row, row);
+		item->parentItem()->delChild(row);
+		endRemoveRows();
+		return true;
+	}
+	return false;
 }
 
 TreeItem *TreeModel::getItem(const QModelIndex &index) const

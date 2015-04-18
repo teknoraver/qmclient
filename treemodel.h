@@ -43,8 +43,9 @@ public:
 	int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
 	void filter(const QString &filter = QString());
-	bool insertRow(int row, const QModelIndex & parent = QModelIndex());
-	void delObject(const QString &path);
+	bool insertRow(int row, const QModelIndex &parent = QModelIndex());
+	bool removeRow(int row, const QModelIndex &parent = QModelIndex());
+
 private:
 	TreeItem* getItem(const QModelIndex &index) const;
 	void add(const QString &obj, int position, QList<TreeItem *> &parents, QList<int>&indentations) const;
