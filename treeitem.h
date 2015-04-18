@@ -37,6 +37,7 @@ public:
 	int row() const;
 	TreeItem* parentItem() const;
 	TreeItem* find(QStringList path);
+	QString path() const;
 
 private:
 	QList<TreeItem *>m_childItems;

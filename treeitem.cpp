@@ -83,3 +83,11 @@ TreeItem* TreeItem::find(QStringList path)
 
 	return NULL;
 }
+
+QString TreeItem::path() const
+{
+	if(m_parentItem)
+		return m_parentItem->path() + '.' + m_itemData;
+	else
+		return m_itemData;
+}

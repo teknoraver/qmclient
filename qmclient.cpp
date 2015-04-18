@@ -123,11 +123,10 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QAction *delAct = new QAction("Delete", &menu);
 	menu.addAction(delAct);
-
 	QString path = getFullPath(index);
 	QAction *a = menu.exec(QCursor::pos());
 	if(a == addAct) {
-		treeModel->addObject(path);
+		treeModel->insertRow(0, index);
 	} else if(a == delAct) {
 		treeModel->delObject(path);
 	}

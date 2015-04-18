@@ -61,6 +61,11 @@ while read line; do
 			Device.Firewall.ChainNumberOfEntries;20
 		EOF
 		;;
+	GETD*)
+		line=${line%%. 0}
+		line=${line##*.}
+		echo "q;$line"
+		;;
 	SET*|DEL*)
 		cat <<-EOF
 			OK

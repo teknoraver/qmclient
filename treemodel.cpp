@@ -142,16 +142,35 @@ void TreeModel::filter(const QString &filter)
 		setupModelData(client->objects.filter(filter, Qt::CaseInsensitive));
 }
 
-void TreeModel::addObject(const QString &path)
+bool TreeModel::insertRow(int row, const QModelIndex &parent)
 {
-	if(client->add(path) > 0)
-		setupModelData(client->objects);
+	TreeItem *item = getItem(parent);
+	QString path = item->path();
+	int i = client->add(path);
+	if(i > 0) {
+		QString name = path + '.' + QString::number(i);
+		beginInsertRows(parent, 0, 0);
+		item->appendChild(new TreeItem(QString::number(i)));
+		endInsertRows();
+		return true;
+	}
+	return false;
 }
 
 void TreeModel::delObject(const QString &path)
 {
 	if(client->del(path))
 		setupModelData(client->objects);
+}
+
+TreeItem *TreeModel::getItem(const QModelIndex &index) const
+{
+	if (index.isValid()) {
+		TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+		if (item)
+		return item;
+	}
+	return rootItem;
 }
 
 void TreeModel::setupModelData(const QStringList &lines)
@@ -172,6 +191,5 @@ void TreeModel::setupModelData(const QStringList &lines)
 			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
 	}
-
 	emit layoutChanged();
 }

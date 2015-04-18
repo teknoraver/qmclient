@@ -83,8 +83,9 @@ int Client::add(const QString &path)
 {
 	QStringList ret = getLines("ADD " + path);
 	if(!ret.contains("ERROR")) {
-		objects << path + '.' + ret[0];
-		objects.sort();
+//		objects << path + '.' + ret[0];
+//		objects.sort();
+		objects.insert(objects.indexOf(path), path + '.' + ret[0]);
 		return ret[0].toInt();
 	}
 	return -1;
