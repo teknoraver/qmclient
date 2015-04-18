@@ -30,6 +30,7 @@ QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
 	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
+	connect(actionHandlers, SIGNAL(toggled(bool)), SLOT(runHandlers(bool)));
 
 	setClearButton(search);
 }
@@ -58,6 +59,8 @@ void QmClient::browseDevice()
 	client = new Client(cpeip->text());
 	leavesModel = new Leaves(client);
 	treeModel = new TreeModel(client, this);
+
+	client->runHandlers(actionHandlers->isChecked());
 
 	leaves->setModel(leavesModel);
 	objects->setModel(treeModel);
@@ -141,6 +144,11 @@ void QmClient::objectsMenu(const QPoint &point)
 		treeModel->insertRow(0, index);
 	else if(a == delAct)
 		treeModel->removeRow(index.row(), index);
+}
+void QmClient::runHandlers(bool run) const
+{
+	if(client)
+		client->runHandlers(run);
 }
 
 void QmClient::about()

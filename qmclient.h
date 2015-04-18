@@ -48,6 +48,7 @@ private slots:
 	void doSearch(const QString&);
 	void leavesMenu(const QPoint&) const;
 	void objectsMenu(const QPoint&);
+	void runHandlers(bool) const;
 	void about();
 };
 

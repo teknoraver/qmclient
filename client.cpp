@@ -74,7 +74,7 @@ void Client::getLeaves(const QString &path)
 bool Client::setValue(const QString &leaf, const QString &value)
 {
 
-	sock.write((QString("SET ") + leaf + ' ' + value + '\n').toUtf8().constData());
+	sock.write(("SET" + e + " " + leaf + ' ' + value + '\n').toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 
 	QByteArray buffer;
@@ -99,7 +99,7 @@ bool Client::setValue(const QString &leaf, const QString &value)
 
 int Client::add(const QString &path)
 {
-	QStringList ret = getLines("ADD " + path);
+	QStringList ret = getLines("ADD" + e + " " + path);
 	if(!ret.contains("ERROR")) {
 //		objects << path + '.' + ret[0];
 //		objects.sort();
@@ -111,7 +111,7 @@ int Client::add(const QString &path)
 
 bool Client::del(const QString &path)
 {
-	QStringList ret = getLines("DEL " + path);
+	QStringList ret = getLines("DEL" + e + " " + path);
 	if(!ret.contains("ERROR")) {
 		foreach(QString s, objects)
 			if(s.startsWith(path))
@@ -119,4 +119,11 @@ bool Client::del(const QString &path)
 		return true;
 	}
 	return false;
+}
+void Client::runHandlers(bool run)
+{
+	if(run)
+		e.clear();
+	else
+		e = "E";
 }
