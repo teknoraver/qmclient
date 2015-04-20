@@ -57,13 +57,19 @@ void QmClient::browseDevice()
 		delete treeModel;
 
 	client = new Client(cpeip->text());
-	leavesModel = new Leaves(client);
-	treeModel = new TreeModel(client, this);
+	if(client->browseDevice()) {
+		leavesModel = new Leaves(client);
+		treeModel = new TreeModel(client, this);
 
-	client->runHandlers(actionHandlers->isChecked());
+		client->runHandlers(actionHandlers->isChecked());
 
-	leaves->setModel(leavesModel);
-	objects->setModel(treeModel);
+		leaves->setModel(leavesModel);
+		objects->setModel(treeModel);
+	} else {
+		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());
+		delete client;
+		client = NULL;
+	}
 
 	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }

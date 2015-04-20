@@ -17,16 +17,13 @@
  */
 
 #include <QStringList>
-#include <QDebug>
 
 #include "treeitem.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(Client *c, QObject *parent) : QAbstractItemModel(parent)
+TreeModel::TreeModel(Client *c, QObject *parent) : QAbstractItemModel(parent), rootItem(NULL)
 {
 	client = c;
-	rootItem = new TreeItem(QString());
-
 	setupModelData(client->objects);
 }
 
@@ -148,7 +145,6 @@ void TreeModel::filter(const QString &filter)
 bool TreeModel::insertRow(int, const QModelIndex &parent)
 {
 	TreeItem *item = getItem(parent);
-	qDebug() << "add" << item->path();
 	int i = client->add(item->path());
 	if(i > 0) {
 		beginInsertRows(parent, 0, 0);
@@ -162,7 +158,6 @@ bool TreeModel::insertRow(int, const QModelIndex &parent)
 bool TreeModel::removeRow(int row, const QModelIndex &parent)
 {
 	TreeItem *item = getItem(parent);
-	qDebug() << "del" << item->path();
 	if(client->del(item->path())) {
 		beginRemoveRows(parent.parent(), row, row);
 		item->parentItem()->delChild(row);
@@ -184,6 +179,10 @@ TreeItem *TreeModel::getItem(const QModelIndex &index) const
 
 void TreeModel::setupModelData(const QStringList &lines)
 {
+	if(rootItem)
+		delete rootItem;
+
+	rootItem = new TreeItem(QString());
 	QList<TreeItem *>parents;
 	QList<int>indentations;
 	parents << rootItem;
@@ -199,7 +198,4 @@ void TreeModel::setupModelData(const QStringList &lines)
 				add(tokens[i], i, parents, indentations);
 	}
 	emit layoutChanged();
-#ifdef QT_DEBUG
-	rootItem->dump();
-#endif
 }

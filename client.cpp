@@ -21,7 +21,6 @@
 Client::Client(QString h)
 {
 	host = h;
-	browseDevice();
 }
 
 QStringList Client::getLines(const QString &cmd)
@@ -48,7 +47,7 @@ QStringList Client::getLines(const QString &cmd)
 	return ret;
 }
 
-void Client::browseDevice()
+bool Client::browseDevice()
 {
 	// if the CM only binds localhost you may want to run this on the device:
 	// datapipe 192.168.1.1 9034 127.0.0.1 9034
@@ -57,13 +56,14 @@ void Client::browseDevice()
 		sock.close();
 
 	sock.connectToHost(host, 9034);
-	if(!sock.waitForConnected(2000)) {
-//		QMessageBox::critical(this, "Error", "Can't connect to " + host);
-		return;
-	}
+	if(!sock.waitForConnected(2000))
+		return false;
+
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
 	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
+
+	return true;
 }
 
 void Client::getLeaves(const QString &path)
@@ -73,7 +73,6 @@ void Client::getLeaves(const QString &path)
 
 bool Client::setValue(const QString &leaf, const QString &value)
 {
-
 	sock.write(("SET" + e + " " + leaf + ' ' + value + '\n').toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 

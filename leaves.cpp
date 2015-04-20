@@ -75,7 +75,7 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 
 bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)
 {
-	bool updated = client->setValue(values[index.row()], value.toString());
+	bool updated = client->setValue(leaves[index.row()], value.toString());
 
 	if(updated) {
 		values[index.row()] = value.toString();

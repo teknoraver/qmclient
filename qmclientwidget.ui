@@ -22,7 +22,7 @@
     <item row="0" column="0">
      <widget class="QLineEdit" name="cpeip">
       <property name="text">
-       <string>127.0.0.1</string>
+       <string>192.168.1.1</string>
       </property>
       <property name="placeholderText">
        <string>CPE Address</string>

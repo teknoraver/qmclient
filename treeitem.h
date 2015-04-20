@@ -39,9 +39,6 @@ public:
 	TreeItem* parentItem() const;
 	TreeItem* find(QStringList path);
 	QString path() const;
-#ifdef QT_DEBUG
-	void dump(int level = 0);
-#endif
 
 private:
 	QList<TreeItem *>m_childItems;

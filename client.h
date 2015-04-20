@@ -28,7 +28,7 @@ public:
 
 	QStringList getLines(const QString &cmd);
 	void getLeaves(const QString &path);
-	void browseDevice();
+	bool browseDevice();
 	bool setValue(const QString &leaf, const QString &value);
 	int add(const QString &path);
 	bool del(const QString &path);
