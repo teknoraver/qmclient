@@ -80,6 +80,7 @@ void QmClient::selectedObject(const QModelIndex &index)
 	leaves->setEnabled(false);
 
 	leavesModel->loadPath(path);
+	leaves->resizeColumnsToContents();
 
 	leaves->setEnabled(true);
 	objects->setEnabled(true);
