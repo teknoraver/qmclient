@@ -180,6 +180,7 @@
  <tabstops>
   <tabstop>cpeip</tabstop>
   <tabstop>browse</tabstop>
+  <tabstop>search</tabstop>
   <tabstop>objects</tabstop>
   <tabstop>leaves</tabstop>
  </tabstops>
@@ -200,6 +201,22 @@
     <hint type="destinationlabel">
      <x>162</x>
      <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cpeip</sender>
+   <signal>returnPressed()</signal>
+   <receiver>browse</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>274</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>591</x>
+     <y>52</y>
     </hint>
    </hints>
   </connection>
