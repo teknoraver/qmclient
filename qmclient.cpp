@@ -153,6 +153,7 @@ void QmClient::objectsMenu(const QPoint &point)
 	else if(a == delAct)
 		treeModel->removeRow(index.row(), index);
 }
+
 void QmClient::runHandlers(bool run) const
 {
 	if(client)

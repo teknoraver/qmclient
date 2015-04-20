@@ -179,6 +179,7 @@ TreeItem *TreeModel::getItem(const QModelIndex &index) const
 
 void TreeModel::setupModelData(const QStringList &lines)
 {
+	beginResetModel();
 	if(rootItem)
 		delete rootItem;
 
@@ -197,5 +198,6 @@ void TreeModel::setupModelData(const QStringList &lines)
 			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);
 	}
+	endResetModel();
 	emit layoutChanged();
 }
