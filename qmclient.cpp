@@ -119,7 +119,7 @@ void QmClient::leavesMenu(const QPoint &point) const
 
 	QMenu menu;
 
-	QAction *searchAct = new QAction("Search " + val, &menu);
+	QAction *searchAct = new QAction(QIcon(":icons/search.png"), "&Search " + val, &menu);
 	menu.addAction(searchAct);
 
 	QAction *a = menu.exec(QCursor::pos());
@@ -135,13 +135,13 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QMenu menu;
 
-	QAction *copyAct = new QAction("Copy", &menu);
+	QAction *copyAct = new QAction(QIcon(":icons/copy.png"), "&Copy path", &menu);
 	menu.addAction(copyAct);
 
-	QAction *addAct = new QAction("Add", &menu);
+	QAction *addAct = new QAction(QIcon(":icons/add.png"), "&Add", &menu);
 	menu.addAction(addAct);
 
-	QAction *delAct = new QAction("Delete", &menu);
+	QAction *delAct = new QAction(QIcon(":icons/del.png"), "&Delete", &menu);
 	menu.addAction(delAct);
 
 	QAction *a = menu.exec(QCursor::pos());
