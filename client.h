@@ -20,6 +20,7 @@
 #define CLIENT_H
 
 #include <QTcpSocket>
+#include <QStringList>
 
 class Client
 {
