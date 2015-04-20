@@ -20,13 +20,13 @@
 #define QMCLIENT_H
 
 #include <QMainWindow>
-#include <QTcpSocket>
 
 #include "ui_qmclientwidget.h"
 
 #include "compat.h"
 #include "treemodel.h"
 #include "leaves.h"
+#include "client.h"
 
 class QmClient: public QMainWindow, private Ui::MainWindow
 {
@@ -36,21 +36,19 @@ public:
 	~QmClient();
 
 private:
-	QTcpSocket sock;
-	void getObjects();
-	void getLeaves(QString);
-	QStringList getLines(QString);
-	TreeModel *objectsModel;
-	Leaves leavesModel;
-	QStringList objectList;
+	Client *client;
+	Leaves *leavesModel;
+	TreeModel *treeModel;
+
+	QString getFullPath(const QModelIndex &index) const;
 
 private slots:
-	QString getFullPath(const QModelIndex&) const;
-	void selectedObject(const QModelIndex&);
 	void browseDevice();
+	void selectedObject(const QModelIndex&);
 	void doSearch(const QString&);
-	void objectsMenu(const QPoint&);
 	void leavesMenu(const QPoint&) const;
+	void objectsMenu(const QPoint&);
+	void runHandlers(bool) const;
 	void about();
 };
 

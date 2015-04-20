@@ -20,7 +20,7 @@
 
 #include "qmclient.h"
 
-QmClient::QmClient()
+QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 {
 	setupUi(this);
 	connect(actionAbout, SIGNAL(triggered()), SLOT(about()));
@@ -28,19 +28,65 @@ QmClient::QmClient()
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
-	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
-
-	leaves->setModel(&leavesModel);
-	objectsModel = NULL;
+	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
+	connect(actionHandlers, SIGNAL(toggled(bool)), SLOT(runHandlers(bool)));
 
 	setClearButton(search);
 }
 
 QmClient::~QmClient()
 {
-	if(objectsModel)
-		delete objectsModel;
+	if(client)
+		delete client;
+	if(leavesModel)
+		delete leavesModel;
+	if(treeModel)
+		delete treeModel;
+}
+
+void QmClient::browseDevice()
+{
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
+	if(client)
+		delete client;
+	if(leavesModel)
+		delete leavesModel;
+	if(treeModel)
+		delete treeModel;
+
+	client = new Client(cpeip->text());
+	if(client->browseDevice()) {
+		leavesModel = new Leaves(client);
+		treeModel = new TreeModel(client, this);
+
+		client->runHandlers(actionHandlers->isChecked());
+
+		leaves->setModel(leavesModel);
+		objects->setModel(treeModel);
+	} else {
+		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());
+		delete client;
+		client = NULL;
+	}
+
+	QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+void QmClient::selectedObject(const QModelIndex &index)
+{
+	QString path = getFullPath(index);
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	objects->setEnabled(false);
+	leaves->setEnabled(false);
+
+	leavesModel->loadPath(path);
+
+	leaves->setEnabled(true);
+	objects->setEnabled(true);
+	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 QString QmClient::getFullPath(const QModelIndex &index) const
@@ -54,130 +100,16 @@ QString QmClient::getFullPath(const QModelIndex &index) const
 	return path;
 }
 
-void QmClient::selectedObject(const QModelIndex &index)
-{
-	QString path = getFullPath(index);
-
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	objects->setEnabled(false);
-	leaves->setEnabled(false);
-
-	getLeaves(path);
-
-	leaves->setEnabled(true);
-	objects->setEnabled(true);
-	QApplication::setOverrideCursor(Qt::ArrowCursor);
-}
-
-QStringList QmClient::getLines(QString cmd)
-{
-	sock.write((cmd + '\n').toUtf8().constData());
-	sock.waitForBytesWritten(-1);
-
-	QByteArray buffer;
-	while(true) {
-		sock.waitForReadyRead(1);
-		QByteArray tmp = sock.readAll();
-		if(!tmp.size())
-			continue;
-
-		buffer += tmp;
-		if(!buffer[buffer.size() - 1]) {
-			buffer.resize(buffer.size() - 1);
-			break;
-		}
-		qApp->processEvents();
-	}
-	QStringList ret = QString(buffer).split('\n', QString::SkipEmptyParts);
-	ret.sort();
-	return ret;
-}
-
-void QmClient::getObjects()
-{
-	objectList = getLines("GETO Device.");
-	objectsModel = new TreeModel(objectList);
-	objects->setModel(objectsModel);
-}
-
-void QmClient::getLeaves(QString path)
-{
-	QStringList l = getLines("GETD " + path + ". 0");
-	leavesModel.fillData(l);
-	leaves->resizeColumnsToContents();
-}
-
-void QmClient::browseDevice()
-{
-	// if the CM only binds localhost you may want to run this on the device:
-	// datapipe 192.168.1.1 9034 127.0.0.1 9034
-
-	if(sock.state() != QAbstractSocket::UnconnectedState)
-		sock.close();
-
-	sock.connectToHost(cpeip->text(), 9034);
-	if(!sock.waitForConnected(2000)) {
-		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());
-		return;
-	}
-	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
-	leavesModel.setSocket(&sock);
-
-	getObjects();
-}
-
 void QmClient::doSearch(const QString &text)
 {
 	if(text.isEmpty()) {
-		delete objectsModel;
-		objectsModel = new TreeModel(objectList);
-		objects->setModel(objectsModel);
+		treeModel->filter();
 		objects->collapseAll();
 		return;
 	}
 
-	delete objectsModel;
-	objectsModel = new TreeModel(objectList.filter(text, Qt::CaseInsensitive));
-	objects->setModel(objectsModel);
+	treeModel->filter(text);
 	objects->expandAll();
-}
-
-void QmClient::objectsMenu(const QPoint &point)
-{
-	QModelIndex index = objects->indexAt(point);
-	if(!index.isValid())
-		return;
-
-	QString val = index.data().toString();
-
-	QMenu menu;
-
-	QAction *addAct = new QAction("Add", &menu);
-	menu.addAction(addAct);
-
-	QAction *delAct = new QAction("Delete", &menu);
-	menu.addAction(delAct);
-
-	QString path = getFullPath(index);
-	QAction *a = menu.exec(QCursor::pos());
-	if(a == addAct) {
-		QStringList ret = getLines("ADD " + path);
-		if(!ret.contains("ERROR")) {
-			objectList << path + '.' + ret[0];
-			objectList.sort();
-			objects->setModel(new TreeModel(objectList));
-		}
-	} else if(a == delAct) {
-		QStringList ret = getLines("DEL " + path);
-		if(!ret.contains("ERROR")) {
-			QStringList newl;
-			foreach(QString s, objectList)
-				if(!s.startsWith(path))
-					newl << s;
-			objectList = newl;
-			objects->setModel(new TreeModel(objectList));
-		}
-	}
 }
 
 void QmClient::leavesMenu(const QPoint &point) const
@@ -196,6 +128,33 @@ void QmClient::leavesMenu(const QPoint &point) const
 	QAction *a = menu.exec(QCursor::pos());
 	if(a == searchAct)
 		search->setText(val);
+}
+
+void QmClient::objectsMenu(const QPoint &point)
+{
+	QModelIndex index = objects->indexAt(point);
+	if(!index.isValid())
+		return;
+
+	QMenu menu;
+
+	QAction *addAct = new QAction("Add", &menu);
+	menu.addAction(addAct);
+
+	QAction *delAct = new QAction("Delete", &menu);
+	menu.addAction(delAct);
+
+	QAction *a = menu.exec(QCursor::pos());
+
+	if(a == addAct)
+		treeModel->insertRow(0, index);
+	else if(a == delAct)
+		treeModel->removeRow(index.row(), index);
+}
+void QmClient::runHandlers(bool run) const
+{
+	if(client)
+		client->runHandlers(run);
 }
 
 void QmClient::about()

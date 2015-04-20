@@ -22,12 +22,13 @@
 #include <QTcpSocket>
 #include <QStringList>
 
+#include "client.h"
+
 class Leaves : public QAbstractTableModel
 {
 public:
-	Leaves();
-	void setSocket(QTcpSocket *s);
-	void fillData(QStringList &data);
+	Leaves(Client *c);
+	void loadPath(QString path);
 
 private:
 	int rowCount(const QModelIndex&) const;
@@ -35,10 +36,10 @@ private:
 	QVariant data(const QModelIndex&, int) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
 	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
-	QTcpSocket *sock;
 
 	QStringList leaves;
 	QStringList values;
+	Client *client;
 };
 
 #endif

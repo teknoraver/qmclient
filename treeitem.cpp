@@ -37,6 +37,11 @@ void TreeItem::appendChild(TreeItem *item)
 	m_childItems.append(item);
 }
 
+void TreeItem::delChild(int row)
+{
+	delete m_childItems.takeAt(row);
+}
+
 TreeItem *TreeItem::child(int row) const
 {
 	return m_childItems.value(row);
@@ -82,4 +87,12 @@ TreeItem* TreeItem::find(QStringList path)
 		}
 
 	return NULL;
+}
+
+QString TreeItem::path() const
+{
+	if(m_parentItem && !m_parentItem->m_itemData.isEmpty())
+		return m_parentItem->path() + '.' + m_itemData;
+	else
+		return m_itemData;
 }

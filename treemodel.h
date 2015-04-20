@@ -24,12 +24,15 @@
 #include <QVariant>
 
 #include "treeitem.h"
+#include "client.h"
 
 class TreeModel:public QAbstractItemModel {
 Q_OBJECT
 public:
-	TreeModel(const QStringList &lines, QObject *parent = 0);
+	TreeModel(Client *c, QObject *parent = 0);
 	~TreeModel();
+
+	Client *client;
 
 	QVariant data(const QModelIndex &index, int role) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -39,8 +42,13 @@ public:
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+	void filter(const QString &filter = QString());
+	bool insertRow(int row, const QModelIndex &parent = QModelIndex());
+	bool removeRow(int row, const QModelIndex &parent = QModelIndex());
+
 private:
-	void add(QString obj, int position, QList<TreeItem *>&parents, QList<int>&indentations) const;
+	TreeItem* getItem(const QModelIndex &index) const;
+	void add(const QString &obj, int position, QList<TreeItem *> &parents, QList<int>&indentations) const;
 	void setupModelData(const QStringList &lines);
 
 	TreeItem *rootItem;

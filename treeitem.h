@@ -29,6 +29,7 @@ public:
 	~TreeItem();
 
 	void appendChild(TreeItem *child);
+	void delChild(int row);
 
 	TreeItem *child(int row) const;
 	int childCount() const;
@@ -37,6 +38,7 @@ public:
 	int row() const;
 	TreeItem* parentItem() const;
 	TreeItem* find(QStringList path);
+	QString path() const;
 
 private:
 	QList<TreeItem *>m_childItems;
