@@ -40,12 +40,7 @@ QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 
 QmClient::~QmClient()
 {
-	if(client)
-		delete client;
-	if(leavesModel)
-		delete leavesModel;
-	if(treeModel)
-		delete treeModel;
+	resetPointers();
 }
 
 void QmClient::browseDevice()
@@ -101,6 +96,9 @@ QString QmClient::getFullPath(const QModelIndex &index) const
 
 void QmClient::doSearch(const QString &text)
 {
+	if(!client)
+		return;
+
 	if(text.isEmpty()) {
 		treeModel->filter();
 		objects->collapseAll();
