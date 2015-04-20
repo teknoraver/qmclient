@@ -18,6 +18,10 @@
 
 #include <QStringList>
 
+#ifdef QT_DEBUG
+#include <QDebug>
+#endif
+
 #include "treeitem.h"
 
 TreeItem::TreeItem(const QString &data, TreeItem *parent)
@@ -91,8 +95,20 @@ TreeItem* TreeItem::find(QStringList path)
 
 QString TreeItem::path() const
 {
-	if(m_parentItem)
+	qDebug() << __func__ << m_parentItem << m_itemData;
+	if(m_parentItem && !m_parentItem->m_itemData.isEmpty())
 		return m_parentItem->path() + '.' + m_itemData;
 	else
 		return m_itemData;
 }
+
+#ifdef QT_DEBUG
+void TreeItem::dump(int level)
+{
+	for(int i = 0; i < level; i++)
+		printf("	");
+	printf("%s\n", m_itemData.toUtf8().constData());
+	foreach(TreeItem *child, m_childItems)
+		child->dump(level + 1);
+}
+#endif

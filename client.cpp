@@ -63,7 +63,7 @@ void Client::browseDevice()
 	}
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
-	objects = getLines("GETO Device.");
+	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
 }
 
 void Client::getLeaves(const QString &path)
