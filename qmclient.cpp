@@ -17,6 +17,7 @@
  */
 
 #include <QMessageBox>
+#include <QClipboard>
 
 #include "qmclient.h"
 
@@ -136,6 +137,9 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QMenu menu;
 
+	QAction *copyAct = new QAction("Copy", &menu);
+	menu.addAction(copyAct);
+
 	QAction *addAct = new QAction("Add", &menu);
 	menu.addAction(addAct);
 
@@ -144,7 +148,9 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QAction *a = menu.exec(QCursor::pos());
 
-	if(a == addAct)
+	if(a == copyAct)
+		QApplication::clipboard()->setText(getFullPath(index));
+	else if(a == addAct)
 		treeModel->insertRow(0, index);
 	else if(a == delAct)
 		treeModel->removeRow(index.row(), index);
