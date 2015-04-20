@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="/">
-    <file>qmclient.png</file>
+    <file>icons/browse.png</file>
+    <file>icons/sete.png</file>
+    <file>icons/info.png</file>
+    <file>icons/exit.png</file>
+    <file>icons/reset.png</file>
+    <file>icons/save.png</file>
+    <file>icons/qmclient.png</file>
   </qresource>
 </RCC>

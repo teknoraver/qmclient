@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="qmclient.qrc">
-    <normaloff>:/qmclient.png</normaloff>:/qmclient.png</iconset>
+    <normaloff>:/icons/qmclient.png</normaloff>:/icons/qmclient.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -33,6 +33,10 @@
      <widget class="QPushButton" name="browse">
       <property name="text">
        <string>&amp;Browse</string>
+      </property>
+      <property name="icon">
+       <iconset resource="qmclient.qrc">
+        <normaloff>:/icons/browse.png</normaloff>:/icons/browse.png</iconset>
       </property>
      </widget>
     </item>
@@ -92,6 +96,8 @@
      <string>Fi&amp;le</string>
     </property>
     <addaction name="actionHandlers"/>
+    <addaction name="actionReset_2"/>
+    <addaction name="actionSave"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu">
@@ -106,16 +112,28 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;About…</string>
    </property>
   </action>
   <action name="actionAbout_Qt">
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
+   </property>
    <property name="text">
     <string>About &amp;Qt…</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Exit</string>
    </property>
@@ -132,8 +150,30 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/sete.png</normaloff>:/icons/sete.png</iconset>
+   </property>
    <property name="text">
     <string>Run &amp;handlers</string>
+   </property>
+  </action>
+  <action name="actionReset_2">
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/reset.png</normaloff>:/icons/reset.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Reset</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
    </property>
   </action>
  </widget>
