@@ -32,6 +32,8 @@ public:
 	bool setValue(const QString &leaf, const QString &value);
 	int add(const QString &path);
 	bool del(const QString &path);
+	void reset();
+	void save();
 	void runHandlers(bool run);
 
 	QStringList objects;

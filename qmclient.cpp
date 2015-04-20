@@ -31,6 +31,8 @@ QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
 	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
 	connect(actionHandlers, SIGNAL(toggled(bool)), SLOT(runHandlers(bool)));
+	connect(actionCmReset, SIGNAL(triggered()), SLOT(cmReset()));
+	connect(actionCmSave, SIGNAL(triggered()), SLOT(cmSave()));
 
 	setClearButton(search);
 }
@@ -49,12 +51,7 @@ void QmClient::browseDevice()
 {
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 
-	if(client)
-		delete client;
-	if(leavesModel)
-		delete leavesModel;
-	if(treeModel)
-		delete treeModel;
+	resetPointers();
 
 	client = new Client(cpeip->text());
 	if(client->browseDevice()) {
@@ -155,6 +152,35 @@ void QmClient::runHandlers(bool run) const
 {
 	if(client)
 		client->runHandlers(run);
+}
+
+void QmClient::cmReset()
+{
+	if(client)
+		client->reset();
+	resetPointers();
+}
+
+void QmClient::cmSave() const
+{
+	if(client)
+		client->save();
+}
+
+void QmClient::resetPointers()
+{
+	if(client) {
+		delete client;
+		client = NULL;
+	}
+	if(leavesModel) {
+		delete leavesModel;
+		leavesModel = NULL;
+	}
+	if(treeModel) {
+		delete treeModel;
+		treeModel = NULL;
+	}
 }
 
 void QmClient::about()

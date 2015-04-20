@@ -96,8 +96,8 @@
      <string>Fi&amp;le</string>
     </property>
     <addaction name="actionHandlers"/>
-    <addaction name="actionReset_2"/>
-    <addaction name="actionSave"/>
+    <addaction name="actionCmReset"/>
+    <addaction name="actionCmSave"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu">
@@ -158,7 +158,7 @@
     <string>Run &amp;handlers</string>
    </property>
   </action>
-  <action name="actionReset_2">
+  <action name="actionCmReset">
    <property name="icon">
     <iconset resource="qmclient.qrc">
      <normaloff>:/icons/reset.png</normaloff>:/icons/reset.png</iconset>
@@ -167,7 +167,7 @@
     <string>&amp;Reset</string>
    </property>
   </action>
-  <action name="actionSave">
+  <action name="actionCmSave">
    <property name="icon">
     <iconset resource="qmclient.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>

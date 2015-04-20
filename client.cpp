@@ -126,3 +126,14 @@ void Client::runHandlers(bool run)
 	else
 		e = "E";
 }
+
+void Client::reset()
+{
+	getLines("RESET");
+	sock.close();
+}
+
+void Client::save()
+{
+	getLines("SAVE");
+}

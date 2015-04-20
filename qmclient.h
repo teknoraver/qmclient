@@ -41,6 +41,7 @@ private:
 	TreeModel *treeModel;
 
 	QString getFullPath(const QModelIndex &index) const;
+	void resetPointers();
 
 private slots:
 	void browseDevice();
@@ -49,6 +50,8 @@ private slots:
 	void leavesMenu(const QPoint&) const;
 	void objectsMenu(const QPoint&);
 	void runHandlers(bool) const;
+	void cmReset();
+	void cmSave() const;
 	void about();
 };
 
