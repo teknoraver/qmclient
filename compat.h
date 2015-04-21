@@ -27,6 +27,9 @@
 
 #if QT_VERSION < 0x050000
 #	define Q_DECL_OVERRIDE
+#	define dataChangedQtx() SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&))
+#else
+#	define dataChangedQtx() SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&))
 #endif
 
 #endif

@@ -1,5 +1,13 @@
-qmclient (1.0) UNRELEASED; urgency=medium
+qmclient (1.1) UNSTABLE; urgency=medium
+
+  * Release 1.1
+  * better objects add/removal without GUI refresh
+  * better objects sorting
+
+ -- Matteo Croce <matteo@openwrt.org>  Tue, 21 Apr 2015 17:53:47 +0200
+
+qmclient (1.0) UNSTABLE; urgency=medium
 
   * Initial release.
 
- -- Matteo Croce <maatteo@openwrt.org>  Wed, 08 Apr 2015 11:04:50 +0200
+ -- Matteo Croce <matteo@openwrt.org>  Wed, 08 Apr 2015 11:04:50 +0200

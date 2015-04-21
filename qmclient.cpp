@@ -53,7 +53,7 @@ void QmClient::browseDevice()
 	if(client->browseDevice()) {
 		leavesModel = new Leaves(client);
 		connect(leavesModel, SIGNAL(dataAboutToBeChanged()), SLOT(disableAll()));
-		connect(leavesModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)), SLOT(enableAll()));
+		connect(leavesModel, dataChangedQtx(), SLOT(enableAll()));
 		treeModel = new TreeModel(client, this);
 
 		client->runHandlers(actionHandlers->isChecked());
