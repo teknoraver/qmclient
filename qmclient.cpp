@@ -119,11 +119,16 @@ void QmClient::leavesMenu(const QPoint &point) const
 
 	QMenu menu;
 
+	QAction *copyAct = new QAction(QIcon(":icons/copy.png"), "&Copy path", &menu);
+	menu.addAction(copyAct);
+
 	QAction *searchAct = new QAction(QIcon(":icons/search.png"), "&Search " + val, &menu);
 	menu.addAction(searchAct);
 
 	QAction *a = menu.exec(QCursor::pos());
-	if(a == searchAct)
+	if(a == copyAct)
+		QApplication::clipboard()->setText(index.data(Qt::UserRole).toString());
+	else if(a == searchAct)
 		search->setText(val);
 }
 

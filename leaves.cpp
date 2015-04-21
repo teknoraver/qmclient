@@ -37,11 +37,15 @@ int Leaves::columnCount(const QModelIndex&) const
 
 QVariant Leaves::data(const QModelIndex &index, int role) const
 {
-	if(role == Qt::DisplayRole) {
+	switch(role) {
+	case Qt::DisplayRole:
+	case Qt::EditRole:
 		switch(index.column()) {
 		case 0: return leaves[index.row()].mid(leaves[index.row()].lastIndexOf('.') + 1);
 		case 1: return values[index.row()];
 		}
+	case Qt::UserRole:
+		return leaves[index.row()];
 	}
 
 	return QVariant::Invalid;
