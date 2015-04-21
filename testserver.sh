@@ -95,6 +95,9 @@ while read line; do
 	BYE)
 		exit
 		;;
+	SAVE|RESET)
+		echo OK
+		;;
 	*)
 		echo '#ERROR #2'
 		;;

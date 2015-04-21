@@ -169,9 +169,13 @@ void QmClient::runHandlers(bool run) const
 
 void QmClient::cmReset()
 {
-	if(client)
+	if(client &&
+		QMessageBox::question(this, "Reset", "Do you really want to reset the CPE to default settings?",
+		QMessageBox::Yes | QMessageBox::No,
+		QMessageBox::No) == QMessageBox::Yes) {
 		client->reset();
-	resetPointers();
+		resetPointers();
+	}
 }
 
 void QmClient::cmSave() const
