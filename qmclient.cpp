@@ -52,6 +52,8 @@ void QmClient::browseDevice()
 	client = new Client(cpeip->text());
 	if(client->browseDevice()) {
 		leavesModel = new Leaves(client);
+		connect(leavesModel, SIGNAL(dataAboutToBeChanged()), SLOT(disableAll()));
+		connect(leavesModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)), SLOT(enableAll()));
 		treeModel = new TreeModel(client, this);
 
 		client->runHandlers(actionHandlers->isChecked());
@@ -71,16 +73,12 @@ void QmClient::selectedObject(const QModelIndex &index)
 {
 	QString path = getFullPath(index);
 
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	objects->setEnabled(false);
-	leaves->setEnabled(false);
+	disableAll();
 
 	leavesModel->loadPath(path);
 	leaves->resizeColumnsToContents();
 
-	leaves->setEnabled(true);
-	objects->setEnabled(true);
-	QApplication::setOverrideCursor(Qt::ArrowCursor);
+	enableAll();
 }
 
 QString QmClient::getFullPath(const QModelIndex &index) const
@@ -153,10 +151,14 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	if(a == copyAct)
 		QApplication::clipboard()->setText(getFullPath(index));
-	else if(a == addAct)
-		treeModel->insertRow(0, index);
-	else if(a == delAct)
-		treeModel->removeRow(index.row(), index);
+	else {
+		disableAll();
+		if(a == addAct)
+			treeModel->insertRow(0, index);
+		else if(a == delAct)
+			treeModel->removeRow(index.row(), index);
+		enableAll();
+	}
 }
 
 void QmClient::runHandlers(bool run) const
@@ -192,6 +194,20 @@ void QmClient::resetPointers()
 		delete treeModel;
 		treeModel = NULL;
 	}
+}
+
+void QmClient::disableAll() const
+{
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	objects->setEnabled(false);
+	leaves->setEnabled(false);
+}
+
+void QmClient::enableAll() const
+{
+	leaves->setEnabled(true);
+	objects->setEnabled(true);
+	QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 void QmClient::about()

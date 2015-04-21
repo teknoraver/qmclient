@@ -21,14 +21,19 @@
 
 #include <QTcpSocket>
 #include <QStringList>
+#include <QAbstractTableModel>
 
 #include "client.h"
 
 class Leaves : public QAbstractTableModel
 {
+Q_OBJECT
 public:
 	Leaves(Client *c);
 	void loadPath(QString path);
+
+signals:
+	void dataAboutToBeChanged();
 
 private:
 	int rowCount(const QModelIndex&) const;

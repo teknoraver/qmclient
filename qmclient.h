@@ -50,6 +50,8 @@ private slots:
 	void leavesMenu(const QPoint&) const;
 	void objectsMenu(const QPoint&);
 	void runHandlers(bool) const;
+	void disableAll() const;
+	void enableAll() const;
 	void cmReset();
 	void cmSave() const;
 	void about();
