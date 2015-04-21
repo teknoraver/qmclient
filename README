@@ -1,0 +1,19 @@
+QmClient
+--------
+
+QmClient is graphic tool to browse the configuration of Pirelli/ADB Routers.
+QmClient is written with the Qt framework (version 4 or 5) to be
+platform independent, both Linux and Windows are supported (OS X coming soon).
+
+To fetch data from the router the tool needs to communicate with cm via TCP.
+By default cm binds the port 9034 on the loopback interface,
+so a TCP proxy is needed to connect to the daemon.
+
+The simplest way is to copy in the board a tool named datapipe
+which listens on an interface and connects to another one like this:
+datapipe 192.168.1.1 9034 127.0.0.1 9034
+This requires the datapipe to be started at every reboot.
+
+A better and permanent solution is to compile a build with
+CONFIG_PACKAGE_yaps-gui-sdk=m
+This will let cm bind all the interfaces, and QmClient can connect directly.
