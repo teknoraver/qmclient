@@ -66,9 +66,6 @@ QStringList Client::getLines(const QString &cmd)
 
 bool Client::browseDevice()
 {
-	// if the CM only binds localhost you may want to run this on the device:
-	// datapipe 192.168.1.1 9034 127.0.0.1 9034
-
 	if(sock.state() != QAbstractSocket::UnconnectedState)
 		sock.close();
 
@@ -77,6 +74,7 @@ bool Client::browseDevice()
 		return false;
 
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
+//	sock.write("nc 127.0.0.1 9034");
 
 	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
 
