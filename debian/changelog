@@ -1,4 +1,4 @@
-qmclient (1.1-1) unstable; urgency=low
+qmclient (1.1) unstable; urgency=low
 
   * Release 1.1
   * better objects add/removal without GUI refresh
@@ -6,7 +6,7 @@ qmclient (1.1-1) unstable; urgency=low
 
  -- Matteo Croce <matteo@openwrt.org>  Tue, 21 Apr 2015 17:53:47 +0200
 
-qmclient (1.0-1) unstable; urgency=low
+qmclient (1.0) unstable; urgency=low
 
   * Initial release.
 

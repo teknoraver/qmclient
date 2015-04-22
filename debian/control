@@ -3,9 +3,8 @@ Section: misc
 Priority: optional
 Maintainer: Matteo Croce <matteo@openwrt.org>
 Build-Depends: debhelper (>= 9), libqt4-dev | qtbase5-dev, qt4-qmake | qt5-qmake
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: https://bitbucket.org/teknoraver/qmclient
-Vcs-Git: https://whispererindarkness@bitbucket.org/teknoraver/qmclient.git
 
 Package: qmclient
 Architecture: any
