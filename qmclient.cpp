@@ -205,6 +205,7 @@ void QmClient::disableAll() const
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	objects->setEnabled(false);
 	leaves->setEnabled(false);
+	qApp->processEvents();
 }
 
 void QmClient::enableAll() const
