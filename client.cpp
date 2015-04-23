@@ -69,12 +69,12 @@ bool Client::browseDevice()
 	if(sock.state() != QAbstractSocket::UnconnectedState)
 		sock.close();
 
-	sock.connectToHost(host, 9034);
+	sock.connectToHost("root", "yaps", host);
 	if(!sock.waitForConnected(2000))
 		return false;
 
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
-//	sock.write("nc 127.0.0.1 9034");
+	sock.write("nc 127.0.0.1 9034");
 
 	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
 

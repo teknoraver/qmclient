@@ -10,7 +10,7 @@ class QSsh: public QTcpSocket
 Q_OBJECT
 
 public:
-	void connectToHost(const QString &hostName, quint16 port = 22);
+	void connectToHost(const QString &user, const QString &pass, const QString &hostName, quint16 port = 22);
 	qint64 write(const char *data);
 	QByteArray readAll();
 	void close();
