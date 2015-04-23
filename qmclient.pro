@@ -8,3 +8,6 @@ TARGET = qmclient
 QT += widgets network
 RC_FILE = qmclient.rc
 LIBS += -lssh2
+
+VER = $$system(grep -m1 -o '[0-9.]*' debian/changelog)
+DEFINES += VERSION=\"\\\"$${VER}\\\"\"
