@@ -1,9 +1,9 @@
-qmclient (1.2+nmu1) unstable; urgency=low
+qmclient (1.2) unstable; urgency=low
 
   * Non-maintainer upload.
   * New upstream version with support for SSH connection
 
- -- Andrea Claudi <a.claudi@univpm.it>  Thu, 23 Apr 2015 14:43:53 +0200
+ -- Matteo Croce <matteo@openwrt.org>  Thu, 23 Apr 2015 14:43:53 +0200
 
 qmclient (1.1) unstable; urgency=low
 
