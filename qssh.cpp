@@ -11,22 +11,38 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 
 	session = libssh2_session_init();
 	if(!session)
-		return false;
+		goto close_sock;
 
 	libssh2_session_set_blocking(session, 1);
 
 	if (libssh2_session_startup(session, socketDescriptor()))
-		return false;
+		goto free_sess;
 
 	if (libssh2_userauth_password(session, user.toUtf8().constData(), pass.toUtf8().constData()))
-		return false;
+		goto disc_sess;
 
 	channel = libssh2_channel_direct_tcpip(session, "127.0.0.1", 9034);
 
 	if(channel == NULL)
-		return false;
+		goto free_chan;
 
 	return true;
+
+free_chan:
+	libssh2_channel_free(channel);
+	channel = NULL;
+
+disc_sess:
+	libssh2_session_disconnect(session, "quit");
+
+free_sess:
+	libssh2_session_free(session);
+	session = NULL;
+
+close_sock:
+	QTcpSocket::close();
+
+	return false;
 }
 
 qint64 QSsh::write(const char *data)
