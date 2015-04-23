@@ -68,8 +68,7 @@ bool Client::browseDevice()
 	if(sock.state() != QAbstractSocket::UnconnectedState)
 		sock.close();
 
-	sock.connectToHost("root", "yaps", "nc 127.0.0.1 9034", host);
-	if(!sock.waitForConnected(2000))
+	if(!sock.connectToHost("root", "yaps", host))
 		return false;
 
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
