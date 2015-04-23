@@ -1,19 +1,22 @@
 #ifndef QSSH_H
 #define QSSH_H
 
-#include <libssh2.h>
-
 #include <QTcpSocket>
+#include <libssh2.h>
 
 class QSsh: public QTcpSocket
 {
 Q_OBJECT
 
 public:
-	void connectToHost(const QString &user, const QString &pass, const QString &hostName, quint16 port = 22);
+	void connectToHost(const QString &user, const QString &pass, const QString &cmd, const QString &hostName, quint16 port = 22);
 	qint64 write(const char *data);
 	QByteArray readAll();
 	void close();
+
+private:
+	LIBSSH2_SESSION *session;
+	LIBSSH2_CHANNEL *channel;
 };
 
 #endif

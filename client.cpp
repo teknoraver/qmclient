@@ -47,7 +47,6 @@ QStringList Client::getLines(const QString &cmd)
 
 	QByteArray buffer;
 	while(true) {
-		sock.waitForReadyRead(1);
 		QByteArray tmp = sock.readAll();
 		if(!tmp.size())
 			continue;
@@ -69,12 +68,11 @@ bool Client::browseDevice()
 	if(sock.state() != QAbstractSocket::UnconnectedState)
 		sock.close();
 
-	sock.connectToHost("root", "yaps", host);
+	sock.connectToHost("root", "yaps", "nc 127.0.0.1 9034", host);
 	if(!sock.waitForConnected(2000))
 		return false;
 
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
-	sock.write("nc 127.0.0.1 9034");
 
 	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
 
@@ -93,7 +91,6 @@ bool Client::setValue(const QString &leaf, const QString &value)
 
 	QByteArray buffer;
 	while(true) {
-		sock.waitForReadyRead(1);
 		QByteArray tmp = sock.readAll();
 		if(!tmp.size())
 			continue;
