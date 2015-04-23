@@ -47,7 +47,6 @@ QStringList Client::getLines(const QString &cmd)
 
 	QByteArray buffer;
 	while(true) {
-		sock.waitForReadyRead(1);
 		QByteArray tmp = sock.readAll();
 		if(!tmp.size())
 			continue;
@@ -66,13 +65,10 @@ QStringList Client::getLines(const QString &cmd)
 
 bool Client::browseDevice()
 {
-	// if the CM only binds localhost you may want to run this on the device:
-	// datapipe 192.168.1.1 9034 127.0.0.1 9034
-
 	if(sock.state() != QAbstractSocket::UnconnectedState)
 		sock.close();
 
-	sock.connectToHost(host, 9034);
+	sock.connectToHost("root", "yaps", "nc 127.0.0.1 9034", host);
 	if(!sock.waitForConnected(2000))
 		return false;
 
@@ -95,7 +91,6 @@ bool Client::setValue(const QString &leaf, const QString &value)
 
 	QByteArray buffer;
 	while(true) {
-		sock.waitForReadyRead(1);
 		QByteArray tmp = sock.readAll();
 		if(!tmp.size())
 			continue;

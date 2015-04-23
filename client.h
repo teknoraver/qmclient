@@ -19,8 +19,9 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <QTcpSocket>
 #include <QStringList>
+
+#include "qssh.h"
 
 class Client
 {
@@ -41,7 +42,7 @@ public:
 	QStringList leaves;
 private:
 	QString host;
-	QTcpSocket sock;
+	QSsh sock;
 	QString e;
 };
 
