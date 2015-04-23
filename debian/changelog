@@ -1,6 +1,5 @@
 qmclient (1.2) unstable; urgency=low
 
-  * Non-maintainer upload.
   * New upstream version with support for SSH connection
 
  -- Matteo Croce <matteo@openwrt.org>  Thu, 23 Apr 2015 14:43:53 +0200
