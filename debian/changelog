@@ -1,3 +1,9 @@
+qmclient (1.2.1) UNRELEASED; urgency=medium
+
+  * Use SSH tunneling instead of netcat
+
+ -- Matteo Croce <matteo@openwrt.org>  Fri, 24 Apr 2015 09:48:51 +0200
+
 qmclient (1.2) unstable; urgency=low
 
   * New upstream version with support for SSH connection
