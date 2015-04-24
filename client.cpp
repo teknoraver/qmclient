@@ -78,9 +78,14 @@ bool Client::browseDevice()
 	return true;
 }
 
-void Client::getLeaves(const QString &path)
+QStringList Client::getLeaves(const QString &path)
 {
-	leaves = getLines("GETD " + path + ". 0");
+	return getLines("GETD " + path + ". 0");
+}
+
+QStringList Client::getMd(const QString &path)
+{
+	return getLines("GETMDP " + path + ". 0");
 }
 
 bool Client::setValue(const QString &leaf, const QString &value)

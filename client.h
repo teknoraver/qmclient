@@ -29,7 +29,8 @@ public:
 	Client(QString host);
 
 	QStringList getLines(const QString &cmd);
-	void getLeaves(const QString &path);
+	QStringList getLeaves(const QString &path);
+	QStringList getMd(const QString &path);
 	bool browseDevice();
 	bool setValue(const QString &leaf, const QString &value);
 	int add(const QString &path);

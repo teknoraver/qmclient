@@ -25,6 +25,25 @@
 
 #include "client.h"
 
+class Leave
+{
+public:
+	enum Type {
+		ReadOnly,
+		Number,
+		String,
+		Date,
+		Enum
+	};
+
+	Leave(const QString &n, const QString &v, Type t = ReadOnly) : name(n), value(v), type(t) { }
+
+	QString name;
+	QString value;
+	Type type;
+	QStringList values;
+};
+
 class Leaves : public QAbstractTableModel
 {
 Q_OBJECT
@@ -42,8 +61,7 @@ private:
 	Qt::ItemFlags flags(const QModelIndex &index) const;
 	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 
-	QStringList leaves;
-	QStringList values;
+	QList<Leave> leaves;
 	Client *client;
 };
 

@@ -37,15 +37,16 @@ int Leaves::columnCount(const QModelIndex&) const
 
 QVariant Leaves::data(const QModelIndex &index, int role) const
 {
+	Leave l = leaves[index.row()];
 	switch(role) {
 	case Qt::DisplayRole:
 	case Qt::EditRole:
 		switch(index.column()) {
-		case 0: return leaves[index.row()].mid(leaves[index.row()].lastIndexOf('.') + 1);
-		case 1: return values[index.row()];
+		case 0: return l.name.mid(l.name.lastIndexOf('.') + 1);
+		case 1: return l.value;
 		}
 	case Qt::UserRole:
-		return leaves[index.row()];
+		return l.name;
 	}
 
 	return QVariant::Invalid;
@@ -54,15 +55,12 @@ QVariant Leaves::data(const QModelIndex &index, int role) const
 void Leaves::loadPath(QString path)
 {
 	leaves.clear();
-	values.clear();
 
-	client->getLeaves(path);
-	foreach(QString leaf, client->leaves) {
+	QStringList md = client->getMd(path);
+	foreach(QString leaf, client->getLeaves(path)) {
 		QStringList tokens = leaf.split(';');
-		if(tokens.size() >= 2) {
-			leaves << tokens[0];
-			values << tokens[1];
-		}
+		if(tokens.size() >= 2)
+			leaves << Leave(tokens[0], tokens[1], Leave::ReadOnly);
 	}
 	emit layoutChanged();
 }
@@ -80,10 +78,10 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)
 {
 	emit dataAboutToBeChanged();
-	bool updated = client->setValue(leaves[index.row()], value.toString());
+	bool updated = client->setValue(leaves[index.row()].name, value.toString());
 
 	if(updated)
-		values[index.row()] = value.toString();
+		leaves[index.row()].value = value.toString();
 
 	emit dataChanged(index, index);
 	return updated;
