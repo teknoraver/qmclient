@@ -168,10 +168,10 @@ Device.Firewall.LastChange
 	inh_na:-1
 	exprt:1
 Device.Firewall.Version
-        access:ro
-        type:string:size:0..16
-        inh_na:-1
-        exprt:1
+	access:ro
+	type:string:size:0..16
+	inh_na:-1
+	exprt:1
 Device.Firewall.Enable
 	access:rw
 	type:boolean
