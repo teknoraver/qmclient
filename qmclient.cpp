@@ -137,14 +137,19 @@ void QmClient::leavesMenu(const QPoint &point) const
 	QAction *copyAct = new QAction(QIcon(":icons/copy.png"), "&Copy path", &menu);
 	menu.addAction(copyAct);
 
-	QAction *searchAct = new QAction(QIcon(":icons/search.png"), "&Search " + val, &menu);
-	menu.addAction(searchAct);
+	QAction *searchAct = NULL;
+	if(val.startsWith("Device.") || val.startsWith("InternetGatewayDevice.")) {
+		searchAct = new QAction(QIcon(":icons/search.png"), "&Search " + val, &menu);
+		menu.addAction(searchAct);
+	}
 
 	QAction *a = menu.exec(QCursor::pos());
 	if(a == copyAct)
 		QApplication::clipboard()->setText(index.data(Qt::UserRole).toString());
-	else if(a == searchAct)
+	else if(a == searchAct && searchAct) {
+		searchType->setCurrentIndex(0);
 		search->setText(val);
+	}
 }
 
 void QmClient::objectsMenu(const QPoint &point)
