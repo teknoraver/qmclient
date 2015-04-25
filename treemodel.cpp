@@ -134,12 +134,12 @@ void TreeModel::add(const QString &lineData, int position, QList<TreeItem *> &pa
 	parents.last()->appendChild(new TreeItem(lineData));
 }
 
-void TreeModel::filter(const QString &filter)
+void TreeModel::filter(const QRegExp &filter)
 {
 	if(filter.isEmpty())
 		setupModelData(client->objects);
 	else
-		setupModelData(client->objects.filter(filter, Qt::CaseInsensitive));
+		setupModelData(client->objects.filter(filter));
 }
 
 bool TreeModel::insertRow(int, const QModelIndex &parent)

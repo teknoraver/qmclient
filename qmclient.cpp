@@ -29,6 +29,7 @@ QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
 	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
 	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
+	connect(searchType, SIGNAL(currentIndexChanged(int)), SLOT(changeSearch()));
 	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
 	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
 	connect(actionHandlers, SIGNAL(toggled(bool)), SLOT(runHandlers(bool)));
@@ -99,13 +100,28 @@ void QmClient::doSearch(const QString &text)
 		return;
 
 	if(text.isEmpty()) {
-		treeModel->filter();
+		treeModel->filter(QRegExp());
 		objects->collapseAll();
 		return;
 	}
 
-	treeModel->filter(text);
+	QRegExp::PatternSyntax ps;
+	switch(searchType->currentIndex()) {
+	default:
+	case 0:	ps = QRegExp::FixedString;
+		break;
+	case 1:	ps = QRegExp::WildcardUnix;
+		break;
+	case 2:	ps = QRegExp::RegExp;
+		break;
+	}
+	treeModel->filter(QRegExp(text, Qt::CaseInsensitive, ps));
 	objects->expandAll();
+}
+
+void QmClient::changeSearch()
+{
+	doSearch(search->text());
 }
 
 void QmClient::leavesMenu(const QPoint &point) const

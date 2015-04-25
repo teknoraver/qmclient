@@ -33,7 +33,7 @@ public:
 	TreeModel(Client *c, QObject *parent = 0);
 	~TreeModel();
 
-	void filter(const QString &filter = QString());
+	void filter(const QRegExp &filter);
 	bool insertRow(int row, const QModelIndex &parent = QModelIndex());
 	bool removeRow(int row, const QModelIndex &parent = QModelIndex());
 

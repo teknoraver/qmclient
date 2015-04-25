@@ -19,27 +19,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLineEdit" name="cpeip">
-      <property name="text">
-       <string>192.168.1.1</string>
-      </property>
-      <property name="placeholderText">
-       <string>CPE Address</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="browse">
-      <property name="text">
-       <string>&amp;Browse</string>
-      </property>
-      <property name="icon">
-       <iconset resource="qmclient.qrc">
-        <normaloff>:/icons/browse.png</normaloff>:/icons/browse.png</iconset>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="0" colspan="2">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -73,11 +52,54 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="0" colspan="2">
+    <item row="0" column="0">
+     <widget class="QLineEdit" name="cpeip">
+      <property name="text">
+       <string>192.168.1.1</string>
+      </property>
+      <property name="placeholderText">
+       <string>CPE Address</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="browse">
+      <property name="text">
+       <string>&amp;Browse</string>
+      </property>
+      <property name="icon">
+       <iconset resource="qmclient.qrc">
+        <normaloff>:/icons/browse.png</normaloff>:/icons/browse.png</iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
      <widget class="QLineEdit" name="search">
       <property name="placeholderText">
        <string>Search</string>
       </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="searchType">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Text</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wildcard</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Regexp</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>
@@ -181,6 +203,7 @@
   <tabstop>cpeip</tabstop>
   <tabstop>browse</tabstop>
   <tabstop>search</tabstop>
+  <tabstop>searchType</tabstop>
   <tabstop>objects</tabstop>
   <tabstop>leaves</tabstop>
  </tabstops>
