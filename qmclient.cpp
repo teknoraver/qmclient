@@ -144,9 +144,11 @@ void QmClient::leavesMenu(const QPoint &point) const
 	}
 
 	QAction *a = menu.exec(QCursor::pos());
-	if(a == copyAct)
+	if(!a)
+		return;
+	else if(a == copyAct)
 		QApplication::clipboard()->setText(index.data(Qt::UserRole).toString());
-	else if(a == searchAct && searchAct) {
+	else if(a == searchAct) {
 		searchType->setCurrentIndex(0);
 		search->setText(val);
 	}
@@ -171,7 +173,9 @@ void QmClient::objectsMenu(const QPoint &point)
 
 	QAction *a = menu.exec(QCursor::pos());
 
-	if(a == copyAct)
+	if(!a)
+		return;
+	else if(a == copyAct)
 		QApplication::clipboard()->setText(getFullPath(index));
 	else {
 		disableAll();
