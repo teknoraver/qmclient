@@ -59,6 +59,7 @@ void QmClient::browseDevice()
 		client->runHandlers(actionHandlers->isChecked());
 
 		leaves->setModel(leavesModel);
+		leaves->setItemDelegate(&delegate);
 		objects->setModel(treeModel);
 	} else {
 		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());

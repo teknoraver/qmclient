@@ -32,8 +32,11 @@ public:
 	TreeModel(Client *c, QObject *parent = 0);
 	~TreeModel();
 
-	Client *client;
+	void filter(const QString &filter = QString());
+	bool insertRow(int row, const QModelIndex &parent = QModelIndex());
+	bool removeRow(int row, const QModelIndex &parent = QModelIndex());
 
+private:
 	QVariant data(const QModelIndex &index, int role) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -41,16 +44,11 @@ public:
 	QModelIndex parent(const QModelIndex &index) const;
 	int rowCount(const QModelIndex &parent = QModelIndex()) const;
 	int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
-	void filter(const QString &filter = QString());
-	bool insertRow(int row, const QModelIndex &parent = QModelIndex());
-	bool removeRow(int row, const QModelIndex &parent = QModelIndex());
-
-private:
 	TreeItem* getItem(const QModelIndex &index) const;
 	void add(const QString &obj, int position, QList<TreeItem *> &parents, QList<int>&indentations) const;
 	void setupModelData(const QStringList &lines);
 
+	Client *client;
 	TreeItem *rootItem;
 };
 

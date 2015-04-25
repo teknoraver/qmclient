@@ -10,8 +10,8 @@ Q_OBJECT
 
 public:
 	bool connectToHost(const QString &user, const QString &pass, const QString &hostName, quint16 port = 22);
-	qint64 write(const char *data);
-	QByteArray readAll();
+	qint64 write(const char *data) const;
+	QByteArray readAll() const;
 	void close();
 
 private:

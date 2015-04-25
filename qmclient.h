@@ -27,6 +27,7 @@
 #include "treemodel.h"
 #include "leaves.h"
 #include "client.h"
+#include "delegate.h"
 
 class QmClient: public QMainWindow, private Ui::MainWindow
 {
@@ -39,6 +40,7 @@ private:
 	Client *client;
 	Leaves *leavesModel;
 	TreeModel *treeModel;
+	MetaDataDelegate delegate;
 
 	QString getFullPath(const QModelIndex &index) const;
 	void resetPointers();

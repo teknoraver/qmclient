@@ -24,25 +24,7 @@
 #include <QAbstractTableModel>
 
 #include "client.h"
-
-class Leave
-{
-public:
-	enum Type {
-		ReadOnly,
-		Number,
-		String,
-		Date,
-		Enum
-	};
-
-	Leave(const QString &n, const QString &v, Type t, QStringList va) : name(n), value(v), type(t), values(va) { }
-
-	QString name;
-	QString value;
-	Type type;
-	QStringList values;
-};
+#include "leave.h"
 
 class Leaves : public QAbstractTableModel
 {
@@ -58,6 +40,7 @@ private:
 	int rowCount(const QModelIndex&) const;
 	int columnCount(const QModelIndex&) const;
 	QVariant data(const QModelIndex&, int) const;
+	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
 	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 

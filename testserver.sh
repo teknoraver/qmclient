@@ -74,8 +74,8 @@ getd() {
 	'GETD Device.Firewall. 0')
 		cat <<-EOF
 			Device.Firewall.Config;Advanced
-			Device.Firewall.LastChange;2009-01-01T01:01:31+01:00
-			Device.Firewall.Version;
+			Device.Firewall.LastChange;1985-01-09T13:37:31+01:00
+			Device.Firewall.Version;1
 			Device.Firewall.Enable;true
 			Device.Firewall.AdvancedLevel;Device.Firewall.Level.1
 			Device.Firewall.Type;Stateful
@@ -162,14 +162,14 @@ Device.Firewall.
 	range:1..1
 	inh_na:-1
 Device.Firewall.LastChange
-	access:ro
+	access:rw
 	type:dateTime
 	default:0001-01-01T00:00:00Z
 	inh_na:-1
 	exprt:1
 Device.Firewall.Version
-	access:ro
-	type:string:size:0..16
+	access:rw
+	type:unsignedInt
 	inh_na:-1
 	exprt:1
 Device.Firewall.Enable

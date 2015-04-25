@@ -90,6 +90,7 @@ void Leaves::loadPath(QString path)
 				} else if(s.startsWith("type:string")) {
 					type = Leave::String;
 				} else if(s.startsWith("enum:")) {
+					type = Leave::Enum;
 					values << s.mid(s.indexOf(':') + 1);
 				}
 			}
@@ -108,6 +109,14 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 		flags |= Qt::ItemIsEditable;
 
 	return flags;
+}
+
+QModelIndex Leaves::index(int row, int column, const QModelIndex &parent) const
+{
+	if (!hasIndex(row, column, parent))
+		return QModelIndex();
+
+	return createIndex(row, column, (void *)&leaves[row]);
 }
 
 bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)

@@ -45,12 +45,12 @@ close_sock:
 	return false;
 }
 
-qint64 QSsh::write(const char *data)
+qint64 QSsh::write(const char *data) const
 {
 	return libssh2_channel_write(channel, data, qstrlen(data));
 }
 
-QByteArray QSsh::readAll()
+QByteArray QSsh::readAll() const
 {
 	QByteArray ret;
 

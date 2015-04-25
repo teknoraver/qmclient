@@ -40,7 +40,6 @@ public:
 	void runHandlers(bool run);
 
 	QStringList objects;
-	QStringList leaves;
 private:
 	QString host;
 	QSsh sock;
