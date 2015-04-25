@@ -16,8 +16,6 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QModelIndex>
-
 #include "leaves.h"
 
 Leaves::Leaves(Client *c)
@@ -94,7 +92,6 @@ void Leaves::loadPath(QString path)
 					values << s.mid(s.indexOf(':') + 1);
 				}
 			}
-			qDebug() << tokens[0] << values;
 			leaves << Leave(tokens[0], tokens[1], type, values);
 		}
 	}

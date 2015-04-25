@@ -23,7 +23,8 @@
 #include <QStringList>
 #include <QVariant>
 
-class TreeItem {
+class TreeItem
+{
 public:
 	TreeItem(const QString &data, TreeItem *parentItem = 0);
 	~TreeItem();

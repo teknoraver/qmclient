@@ -22,11 +22,11 @@
 #include <QDateTimeEdit>
 
 #include "leave.h"
-#include "delegate.h"
+#include "mddelegate.h"
 
-QWidget *MetaDataDelegate::createEditor(QWidget *parent,
-				       const QStyleOptionViewItem &,
-				       const QModelIndex &index) const
+QWidget* MetaDataDelegate::createEditor(QWidget *parent,
+					const QStyleOptionViewItem &,
+					const QModelIndex &index) const
 {
 	Leave *leave = (Leave*)index.internalPointer();
 

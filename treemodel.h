@@ -26,7 +26,8 @@
 #include "treeitem.h"
 #include "client.h"
 
-class TreeModel:public QAbstractItemModel {
+class TreeModel:public QAbstractItemModel
+{
 Q_OBJECT
 public:
 	TreeModel(Client *c, QObject *parent = 0);

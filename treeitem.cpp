@@ -16,8 +16,6 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QStringList>
-
 #include "treeitem.h"
 
 TreeItem::TreeItem(const QString &data, TreeItem *parent)
