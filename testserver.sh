@@ -5,7 +5,7 @@
 geto() {
 	case "$@" in
 	'GETO Device.')
-		cat <<-EOF
+		cat <<-'EOF'
 			Device
 			Device.WiFi
 			Device.Routing
@@ -50,7 +50,7 @@ geto() {
 		EOF
 		;;
 	'GETO InternetGatewayDevice.')
-		cat <<-EOF
+		cat <<-'EOF'
 			InternetGatewayDevice.User.1
 			InternetGatewayDevice.User.2
 		EOF
@@ -62,7 +62,7 @@ geto() {
 getd() {
 	case "$@" in
 	'GETD InternetGatewayDevice. 0')
-		cat <<-EOF
+		cat <<-'EOF'
 			InternetGatewayDevice.DeviceSummary;InternetGatewayDevice:1.2[](Baseline:1,EthernetLAN:1,WiFiLAN:1,ADSLWAN:1,EthernetWAN:1,QoS:1,QoSDynamicFlow:1,Bridging:1,Time:1,IPPing:1,TraceRoute:1,DeviceAssociation:1,UDPConnReq:1,USBHostBasic:1,SelfTestDiag:1),VoiceService:1.0[1](Endpoint:1,TAEndpoint:1,SIPEndpoint:1)InternetGatewayDevice:2.2[](RouterAdvertisement:1,)InternetGatewayDevice:2.2[]
 			InternetGatewayDevice.LANDeviceNumberOfEntries;3
 			InternetGatewayDevice.WANDeviceNumberOfEntries;3
@@ -70,12 +70,12 @@ getd() {
 		EOF
 		;;
 	'GETD Device. 0')
-		cat <<-EOF
+		cat <<-'EOF'
 			Device.InterfaceStackNumberOfEntries;53
 		EOF
 		;;
 	'GETD Device.WiFi. 0')
-		cat <<-EOF
+		cat <<-'EOF'
 			Device.WiFi.AccessPointNumberOfEntries;4
 			Device.WiFi.X_ADB_WDSNumberOfEntries;0
 			Device.WiFi.RadioNumberOfEntries;1
@@ -83,12 +83,12 @@ getd() {
 		EOF
 		;;
 	'GETD Device.Routing. 0')
-		cat <<-EOF
+		cat <<-'EOF'
 			Device.Routing.RouterNumberOfEntries;0
 		EOF
 		;;
 	'GETD Device.Firewall. 0')
-		cat <<-EOF
+		cat <<-'EOF'
 			Device.Firewall.Config;Advanced
 			Device.Firewall.LastChange;1985-01-09T13:37:31+01:00
 			Device.Firewall.Version;1
@@ -110,7 +110,7 @@ getd() {
 getmdp() {
 	case "$@" in
 	'GETMDP Device. 0')
-		cat <<EOF
+		cat <<'EOF'
 Device.
 	access:ro
 	range:1..1
@@ -132,7 +132,7 @@ Device.InterfaceStackNumberOfEntries
 EOF
 		;;
 	'GETMDP Device.WiFi. 0')
-		cat <<EOF
+		cat <<'EOF'
 Device.WiFi.
 	access:ro
 	range:1..1
@@ -172,7 +172,7 @@ Device.WiFi.SSIDNumberOfEntries
 EOF
 		;;
 	'GETMDP Device.Firewall. 0')
-		cat <<EOF
+		cat <<'EOF'
 Device.Firewall.
 	access:ro
 	range:1..1
