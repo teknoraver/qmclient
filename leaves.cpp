@@ -56,11 +56,46 @@ void Leaves::loadPath(QString path)
 {
 	leaves.clear();
 
+	QHash<QString, QStringList> mdata;
 	QStringList md = client->getMd(path);
+	QString last;
+	foreach(QString line, md) {
+		if(line.startsWith('	'))
+			mdata[last] << line.trimmed();
+		else {
+			last = line;
+			mdata[last] = QStringList();
+		}
+	}
+
 	foreach(QString leaf, client->getLeaves(path)) {
 		QStringList tokens = leaf.split(';');
-		if(tokens.size() >= 2)
-			leaves << Leave(tokens[0], tokens[1], Leave::ReadOnly);
+		if(tokens.size() >= 2) {
+			Leave::Type type = Leave::ReadOnly;
+			QStringList values;
+			foreach(QString s, mdata[tokens[0]]) {
+				if(s == "access:ro") {
+					type = Leave::ReadOnly;
+					break;
+				} else if(s == "type:boolean") {
+					type = Leave::Enum;
+					values << "true" << "false";
+					break;
+				} else if(s == "type:unsignedInt") {
+					type = Leave::Number;
+					break;
+				} else if(s == "type:dateTime") {
+					type = Leave::Date;
+					break;
+				} else if(s.startsWith("type:string")) {
+					type = Leave::String;
+				} else if(s.startsWith("enum:")) {
+					values << s.mid(s.indexOf(':') + 1);
+				}
+			}
+			qDebug() << tokens[0] << values;
+			leaves << Leave(tokens[0], tokens[1], type, values);
+		}
 	}
 	emit layoutChanged();
 }
@@ -69,7 +104,7 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 {
 	Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
-	if(index.column() == 1)
+	if(index.column() == 1 && leaves[index.row()].type != Leave::ReadOnly)
 		flags |= Qt::ItemIsEditable;
 
 	return flags;

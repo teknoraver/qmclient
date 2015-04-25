@@ -188,7 +188,7 @@ Device.Firewall.AdvancedLevel
 	inh_na:-1
 	exprt:1
 Device.Firewall.Type
-	access:ro
+	access:rw
 	type:string
 	enum:Stateful
 	enum:Stateless

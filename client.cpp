@@ -59,7 +59,6 @@ QStringList Client::getLines(const QString &cmd)
 //		qApp->processEvents();
 	}
 	QStringList ret = QString(buffer).split('\n', QString::SkipEmptyParts);
-	std::sort(ret.begin(), ret.end(), obj_compare);
 	return ret;
 }
 
@@ -74,13 +73,16 @@ bool Client::browseDevice()
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
 	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
+	std::sort(objects.begin(), objects.end(), obj_compare);
 
 	return true;
 }
 
 QStringList Client::getLeaves(const QString &path)
 {
-	return getLines("GETD " + path + ". 0");
+	QStringList ret = getLines("GETD " + path + ". 0");
+	ret.sort();
+	return ret;
 }
 
 QStringList Client::getMd(const QString &path)

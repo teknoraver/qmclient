@@ -36,7 +36,7 @@ public:
 		Enum
 	};
 
-	Leave(const QString &n, const QString &v, Type t = ReadOnly) : name(n), value(v), type(t) { }
+	Leave(const QString &n, const QString &v, Type t, QStringList va) : name(n), value(v), type(t), values(va) { }
 
 	QString name;
 	QString value;
