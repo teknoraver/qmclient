@@ -87,7 +87,7 @@
       </property>
       <item>
        <property name="text">
-        <string>Text</string>
+        <string>Plain Text</string>
        </property>
       </item>
       <item>
@@ -97,7 +97,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Regexp</string>
+        <string>RegExp</string>
        </property>
       </item>
      </widget>
