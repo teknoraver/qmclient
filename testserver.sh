@@ -28,9 +28,25 @@ geto() {
 			Device.Routing.RIP
 			Device.Firewall
 			Device.Firewall.Chain.1
+			Device.Firewall.Chain.1.Rule.1
+			Device.Firewall.Chain.1.Rule.2
+			Device.Firewall.Chain.1.Rule.10
 			Device.Firewall.Chain.2
+			Device.Firewall.Chain.2.Rule.1
+			Device.Firewall.Chain.2.Rule.2
+			Device.Firewall.Chain.2.Rule.3
 			Device.Firewall.Chain.10
+			Device.Firewall.Chain.10.Rule.1
+			Device.Firewall.Chain.10.Rule.10
+			Device.Firewall.Chain.10.Rule.12
 			Device.Firewall.Chain.12
+			Device.Firewall.Chain.12.Rule.1
+			Device.Firewall.Chain.12.Rule.2
+			Device.Firewall.Chain.12.Rule.4
+			Device.Firewall.Level.1
+			Device.Firewall.Level.2
+			Device.Firewall.Level.3
+			Device.Firewall.Level.4
 		EOF
 		;;
 	'GETO InternetGatewayDevice.')

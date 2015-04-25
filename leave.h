@@ -5,9 +5,8 @@ class Leave
 {
 public:
 	enum Type {
-		ReadOnly,
-		Number,
 		String,
+		Number,
 		Date,
 		Enum
 	};

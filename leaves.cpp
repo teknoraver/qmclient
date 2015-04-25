@@ -69,13 +69,10 @@ void Leaves::loadPath(QString path)
 	foreach(QString leaf, client->getLeaves(path)) {
 		QStringList tokens = leaf.split(';');
 		if(tokens.size() >= 2) {
-			Leave::Type type = Leave::ReadOnly;
+			Leave::Type type = Leave::String;
 			QStringList values;
 			foreach(QString s, mdata[tokens[0]]) {
-				if(s == "access:ro") {
-					type = Leave::ReadOnly;
-					break;
-				} else if(s == "type:boolean") {
+				if(s == "type:boolean") {
 					type = Leave::Enum;
 					values << "true" << "false";
 					break;
@@ -90,6 +87,12 @@ void Leaves::loadPath(QString path)
 				} else if(s.startsWith("enum:")) {
 					type = Leave::Enum;
 					values << s.mid(s.indexOf(':') + 1);
+				} else if(s.startsWith("pathref:targetParent:")) {
+					type = Leave::Enum;
+					QString ref = s.mid(s.lastIndexOf(':') + 1);
+					if(ref.startsWith('.'))
+						ref = tokens[0].mid(0, tokens[0].indexOf('.')) + ref;
+					values << client->objects.filter(QRegExp(ref.replace('.', "\\.(\\d+\\.|)")));
 				}
 			}
 			leaves << Leave(tokens[0], tokens[1], type, values);
@@ -102,7 +105,7 @@ Qt::ItemFlags Leaves::flags(const QModelIndex &index) const
 {
 	Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
-	if(index.column() == 1 && leaves[index.row()].type != Leave::ReadOnly)
+	if(index.column() == 1)
 		flags |= Qt::ItemIsEditable;
 
 	return flags;

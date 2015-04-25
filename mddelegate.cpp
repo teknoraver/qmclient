@@ -31,8 +31,6 @@ QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 	Leave *leave = (Leave*)index.internalPointer();
 
 	switch(leave->type) {
-	case Leave::ReadOnly:
-		return NULL;
 	case Leave::Number: {
 		QSpinBox *editor = new QSpinBox(parent);
 		editor->setRange(INT_MIN, INT_MAX);
@@ -60,8 +58,6 @@ void MetaDataDelegate::setEditorData(QWidget *edit, const QModelIndex &index) co
 	Leave *leave = (Leave*)index.internalPointer();
 
 	switch(leave->type) {
-	case Leave::ReadOnly:
-		return;
 	case Leave::Number: {
 		QSpinBox *editor = static_cast<QSpinBox *>(edit);
 		editor->setValue(leave->value.toInt());
@@ -92,8 +88,6 @@ void MetaDataDelegate::setModelData(QWidget *edit, QAbstractItemModel *model,
 	QVariant value;
 
 	switch(leave->type) {
-	case Leave::ReadOnly:
-		return;
 	case Leave::Number: {
 		QSpinBox *editor = static_cast<QSpinBox *>(edit);
 		editor->interpretText();
