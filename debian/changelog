@@ -1,4 +1,11 @@
-qmclient (1.2.1) UNRELEASED; urgency=medium
+qmclient (1.3) unstable; urgency=medium
+
+  * Support for RegExp and Wildcard search
+  * Handle leaves metadata and show proper edit widgets
+
+ -- Matteo Croce <matteo@openwrt.org>  Sat, 25 Apr 2015 23:16:06 +0200
+
+qmclient (1.2.1) unstable; urgency=medium
 
   * Use SSH tunneling instead of netcat
 
