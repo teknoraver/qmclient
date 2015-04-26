@@ -46,6 +46,8 @@ QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 	}
 	case Leave::Date: {
 		QDateTimeEdit *editor = new QDateTimeEdit(parent);
+		editor->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
+		editor->setCalendarPopup(true);
 		return editor;
 	}
 	}
