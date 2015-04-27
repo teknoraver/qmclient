@@ -89,10 +89,25 @@ void Leaves::loadPath(QString path)
 					values << s.mid(s.indexOf(':') + 1);
 				} else if(s.startsWith("pathref:targetParent:")) {
 					type = Leave::Enum;
+
 					QString ref = s.mid(s.lastIndexOf(':') + 1);
+					if(ref.endsWith('.'))
+						ref = ref.left(ref.size() - 1);
+
 					if(ref.startsWith('.'))
-						ref = tokens[0].mid(0, tokens[0].indexOf('.')) + ref;
-					values << client->objects.filter(QRegExp(ref.remove(".{i}").replace('.', "\\.(\\d+\\.|)")));
+						ref = tokens[0].mid(1) + ref;
+					else if(ref.startsWith('#')) {
+						QString unenum = path.remove(QRegExp("\\.\\d+"));
+						QString basename = ref.mid(ref.lastIndexOf('#') + 1);
+						QStringList pathlist = unenum.split('.');
+						int hashes = qMin(pathlist.size(), ref.count('#'));
+						ref = QStringList(pathlist.mid(0, pathlist.size() - hashes)).join('.') + basename;
+					}
+
+					ref = ref.remove(".{i}");
+					ref = ref.replace('.', "\\.(\\d+\\.|)");
+					ref = '^' + ref + "\\.\\d+$";
+					values << client->objects.filter(QRegExp(ref));
 				}
 			}
 			leaves << Leave(tokens[0], tokens[1], type, values);
