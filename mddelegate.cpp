@@ -21,30 +21,30 @@
 #include <QComboBox>
 #include <QDateTimeEdit>
 
-#include "leave.h"
+#include "leaf.h"
 #include "mddelegate.h"
 
 QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 					const QStyleOptionViewItem &,
 					const QModelIndex &index) const
 {
-	Leave *leave = (Leave*)index.internalPointer();
+	Leaf *leaf = (Leaf*)index.internalPointer();
 
-	switch(leave->type) {
-	case Leave::Number: {
+	switch(leaf->type) {
+	case Leaf::Number: {
 		QSpinBox *editor = new QSpinBox(parent);
 		editor->setRange(INT_MIN, INT_MAX);
 		return editor;
 	}
-	case Leave::String: {
+	case Leaf::String: {
 		QLineEdit *editor = new QLineEdit(parent);
 		return editor;
 	}
-	case Leave::Enum: {
+	case Leaf::Enum: {
 		QComboBox *editor = new QComboBox(parent);
 		return editor;
 	}
-	case Leave::Date: {
+	case Leaf::Date: {
 		QDateTimeEdit *editor = new QDateTimeEdit(parent);
 		editor->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
 		editor->setCalendarPopup(true);
@@ -57,27 +57,27 @@ QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 
 void MetaDataDelegate::setEditorData(QWidget *edit, const QModelIndex &index) const
 {
-	Leave *leave = (Leave*)index.internalPointer();
+	Leaf *leaf = (Leaf*)index.internalPointer();
 
-	switch(leave->type) {
-	case Leave::Number: {
+	switch(leaf->type) {
+	case Leaf::Number: {
 		QSpinBox *editor = static_cast<QSpinBox *>(edit);
-		editor->setValue(leave->value.toInt());
+		editor->setValue(leaf->value.toInt());
 		break;
 	}
-	case Leave::String: {
+	case Leaf::String: {
 		QLineEdit *editor = static_cast<QLineEdit *>(edit);
-		editor->setText(leave->value);
+		editor->setText(leaf->value);
 		break;
 	}
-	case Leave::Enum: {
+	case Leaf::Enum: {
 		QComboBox *editor = static_cast<QComboBox *>(edit);
-		editor->addItems(leave->values);
+		editor->addItems(leaf->values);
 		break;
 	}
-	case Leave::Date: {
+	case Leaf::Date: {
 		QDateTimeEdit *editor = static_cast<QDateTimeEdit *>(edit);
-		editor->setDateTime(QDateTime::fromString(leave->value, Qt::ISODate));
+		editor->setDateTime(QDateTime::fromString(leaf->value, Qt::ISODate));
 		break;
 	}
 	}
@@ -86,27 +86,27 @@ void MetaDataDelegate::setEditorData(QWidget *edit, const QModelIndex &index) co
 void MetaDataDelegate::setModelData(QWidget *edit, QAbstractItemModel *model,
 				   const QModelIndex &index) const
 {
-	Leave *leave = (Leave*)index.internalPointer();
+	Leaf *leaf = (Leaf*)index.internalPointer();
 	QVariant value;
 
-	switch(leave->type) {
-	case Leave::Number: {
+	switch(leaf->type) {
+	case Leaf::Number: {
 		QSpinBox *editor = static_cast<QSpinBox *>(edit);
 		editor->interpretText();
 		value = editor->value();
 		break;
 	}
-	case Leave::String: {
+	case Leaf::String: {
 		QLineEdit *editor = static_cast<QLineEdit *>(edit);
 		value = editor->text();
 		break;
 	}
-	case Leave::Enum: {
+	case Leaf::Enum: {
 		QComboBox *editor = static_cast<QComboBox *>(edit);
 		value = editor->currentText();
 		break;
 	}
-	case Leave::Date: {
+	case Leaf::Date: {
 		QDateTimeEdit *editor = static_cast<QDateTimeEdit *>(edit);
 		value = editor->dateTime();
 		break;

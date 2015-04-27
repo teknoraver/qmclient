@@ -102,7 +102,7 @@ getd() {
 	*)
 		line=${line%%. 0}
 		line=${line##*.}
-		echo "Leave;$line"
+		echo "Leaf;$line"
 		;;
 	esac
 }

@@ -1,5 +1,5 @@
 FORMS += qmclientwidget.ui
-HEADERS += compat.h qmclient.h treeitem.h treemodel.h leaves.h client.h qssh.h mddelegate.h
+HEADERS += compat.h qmclient.h treeitem.h treemodel.h leaves.h client.h qssh.h mddelegate.h leaf.h
 SOURCES += main.cpp qmclient.cpp treeitem.cpp treemodel.cpp leaves.cpp client.cpp qssh.cpp mddelegate.cpp
 RESOURCES += qmclient.qrc
 QMCLIENT = app

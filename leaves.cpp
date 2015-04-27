@@ -35,7 +35,7 @@ int Leaves::columnCount(const QModelIndex&) const
 
 QVariant Leaves::data(const QModelIndex &index, int role) const
 {
-	Leave l = leaves[index.row()];
+	Leaf l = leaves[index.row()];
 	switch(role) {
 	case Qt::DisplayRole:
 	case Qt::EditRole:
@@ -69,26 +69,26 @@ void Leaves::loadPath(QString path)
 	foreach(QString leaf, client->getLeaves(path)) {
 		QStringList tokens = leaf.split(';');
 		if(tokens.size() >= 2) {
-			Leave::Type type = Leave::String;
+			Leaf::Type type = Leaf::String;
 			QStringList values;
 			foreach(QString s, mdata[tokens[0]]) {
 				if(s == "type:boolean") {
-					type = Leave::Enum;
+					type = Leaf::Enum;
 					values << "true" << "false";
 					break;
 				} else if(s == "type:unsignedInt") {
-					type = Leave::Number;
+					type = Leaf::Number;
 					break;
 				} else if(s == "type:dateTime") {
-					type = Leave::Date;
+					type = Leaf::Date;
 					break;
 				} else if(s.startsWith("type:string")) {
-					type = Leave::String;
+					type = Leaf::String;
 				} else if(s.startsWith("enum:")) {
-					type = Leave::Enum;
+					type = Leaf::Enum;
 					values << s.mid(s.indexOf(':') + 1);
 				} else if(s.startsWith("pathref:targetParent:")) {
-					type = Leave::Enum;
+					type = Leaf::Enum;
 
 					QString ref = s.mid(s.lastIndexOf(':') + 1);
 					if(ref.endsWith('.'))
@@ -110,7 +110,7 @@ void Leaves::loadPath(QString path)
 					values << client->objects.filter(QRegExp(ref));
 				}
 			}
-			leaves << Leave(tokens[0], tokens[1], type, values);
+			leaves << Leaf(tokens[0], tokens[1], type, values);
 		}
 	}
 	emit layoutChanged();

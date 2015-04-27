@@ -1,7 +1,7 @@
-#ifndef LEAVE_H
-#define LEAVE_H
+#ifndef LEAF_H
+#define LEAF_H
 
-class Leave
+class Leaf
 {
 public:
 	enum Type {
@@ -11,7 +11,7 @@ public:
 		Enum
 	};
 
-	Leave(const QString &n, const QString &v, Type t, QStringList va) :
+	Leaf(const QString &n, const QString &v, Type t, QStringList va) :
 				name(n), value(v), type(t), values(va) { }
 
 	QString name;

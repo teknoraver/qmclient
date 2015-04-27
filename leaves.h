@@ -24,7 +24,7 @@
 #include <QAbstractTableModel>
 
 #include "client.h"
-#include "leave.h"
+#include "leaf.h"
 
 class Leaves : public QAbstractTableModel
 {
@@ -42,9 +42,9 @@ private:
 	QVariant data(const QModelIndex&, int) const;
 	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
-	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-	QList<Leave> leaves;
+	QList<Leaf> leaves;
 	Client *client;
 };
 
