@@ -32,6 +32,7 @@ Q_OBJECT
 public:
 	Leaves(Client *c);
 	void loadPath(QString path);
+	bool enumeration;
 
 signals:
 	void dataAboutToBeChanged();
@@ -43,6 +44,7 @@ private:
 	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 	Qt::ItemFlags flags(const QModelIndex &index) const;
 	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
 	QList<Leaf> leaves;
 	Client *client;

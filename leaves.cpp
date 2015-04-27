@@ -113,6 +113,9 @@ void Leaves::loadPath(QString path)
 			leaves << Leaf(tokens[0], tokens[1], type, values);
 		}
 	}
+	if(!leaves.isEmpty())
+		enumeration = leaves[0].name.count('.') > path.count('.') + 1;
+
 	emit layoutChanged();
 }
 
@@ -144,4 +147,25 @@ bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)
 
 	emit dataChanged(index, index);
 	return updated;
+}
+
+QVariant Leaves::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	if(role != Qt::DisplayRole)
+		return QVariant::Invalid;
+
+	if(orientation == Qt::Horizontal) {
+		if(!section)
+			return QString("Parameter");
+		else
+			return QString("Value");
+	} else if(orientation == Qt::Vertical) {
+		if(enumeration) {
+			QString name = leaves[section].name;
+			name = name.mid(name.lastIndexOf('.') - 1);
+			return name.mid(0, name.indexOf('.'));
+		}
+	}
+
+	return QVariant::Invalid;
 }

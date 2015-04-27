@@ -79,6 +79,7 @@ void QmClient::selectedObject(const QModelIndex &index)
 
 	leavesModel->loadPath(path);
 	leaves->resizeColumnsToContents();
+	leaves->verticalHeader()->setVisible(leavesModel->enumeration);
 
 	enableAll();
 }
