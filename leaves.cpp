@@ -92,7 +92,7 @@ void Leaves::loadPath(QString path)
 					QString ref = s.mid(s.lastIndexOf(':') + 1);
 					if(ref.startsWith('.'))
 						ref = tokens[0].mid(0, tokens[0].indexOf('.')) + ref;
-					values << client->objects.filter(QRegExp(ref.replace('.', "\\.(\\d+\\.|)")));
+					values << client->objects.filter(QRegExp(ref.remove(".{i}").replace('.', "\\.(\\d+\\.|)")));
 				}
 			}
 			leaves << Leave(tokens[0], tokens[1], type, values);
