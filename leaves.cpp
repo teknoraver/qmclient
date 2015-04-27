@@ -100,7 +100,7 @@ void Leaves::loadPath(QString path)
 						QString unenum = path.remove(QRegExp("\\.\\d+"));
 						QString basename = ref.mid(ref.lastIndexOf('#') + 1);
 						QStringList pathlist = unenum.split('.');
-						int hashes = qMin(pathlist.size(), ref.count("#"));
+						int hashes = qMin(pathlist.size(), ref.count('#'));
 						ref = QStringList(pathlist.mid(0, pathlist.size() - hashes)).join('.') + basename;
 					}
 
