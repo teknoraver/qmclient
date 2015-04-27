@@ -95,7 +95,7 @@ void Leaves::loadPath(QString path)
 						ref = ref.left(ref.size() - 1);
 
 					if(ref.startsWith('.'))
-						ref = tokens[0].mid(1) + ref;
+						ref = tokens[0].mid(0, tokens[0].indexOf('.')) + ref;
 					else if(ref.startsWith('#')) {
 						QString unenum = path.remove(QRegExp("\\.\\d+"));
 						QString basename = ref.mid(ref.lastIndexOf('#') + 1);
