@@ -101,7 +101,7 @@ void Leaves::loadPath(QString path)
 						QString basename = ref.mid(ref.lastIndexOf('#') + 1);
 						QStringList pathlist = unenum.split('.');
 						int hashes = qMin(pathlist.size(), ref.count('#'));
-						ref = QStringList(pathlist.mid(0, pathlist.size() - hashes)).join('.') + basename;
+						ref = QStringList(pathlist.mid(0, pathlist.size() - hashes)).join(".") + basename;
 					}
 
 					ref = ref.remove(".{i}");
