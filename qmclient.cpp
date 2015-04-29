@@ -232,8 +232,11 @@ void QmClient::cmReset()
 
 void QmClient::cmSave() const
 {
-	if(client)
+	if(client) {
+		disableAll();
 		client->save();
+		enableAll();
+	}
 }
 
 void QmClient::resetPointers()
