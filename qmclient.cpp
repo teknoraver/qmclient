@@ -19,6 +19,7 @@
 #include <QMessageBox>
 #include <QClipboard>
 #include <QCompleter>
+#include <QSettings>
 
 #include "qmclient.h"
 
