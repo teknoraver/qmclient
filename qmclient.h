@@ -41,6 +41,7 @@ private:
 	Leaves *leavesModel;
 	TreeModel *treeModel;
 	MetaDataDelegate delegate;
+	QStringList recents;
 
 	QString getFullPath(const QModelIndex &index) const;
 	void resetPointers();

@@ -45,9 +45,6 @@
         <attribute name="horizontalHeaderVisible">
          <bool>true</bool>
         </attribute>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
        </widget>
       </item>
      </layout>
@@ -55,7 +52,7 @@
     <item row="0" column="0">
      <widget class="QLineEdit" name="cpeip">
       <property name="text">
-       <string>192.168.1.1</string>
+       <string/>
       </property>
       <property name="placeholderText">
        <string>CPE Address</string>

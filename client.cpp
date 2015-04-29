@@ -71,6 +71,7 @@ bool Client::browseDevice()
 		return false;
 
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
+	sock.setSocketOption(QAbstractSocket::KeepAliveOption, true);
 
 	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
 	std::sort(objects.begin(), objects.end(), obj_compare);

@@ -18,6 +18,7 @@
 
 #include <QMessageBox>
 #include <QClipboard>
+#include <QCompleter>
 
 #include "qmclient.h"
 
@@ -37,6 +38,15 @@ QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 	connect(actionCmSave, SIGNAL(triggered()), SLOT(cmSave()));
 
 	setClearButton(search);
+
+	QSettings settings;
+	int size = settings.beginReadArray("recents");
+	for (int i = 0; i < size; i++) {
+		settings.setArrayIndex(i);
+		recents << settings.value("cpeip").toString();
+	}
+	settings.endArray();
+	cpeip->setCompleter(new QCompleter(recents, cpeip));
 }
 
 QmClient::~QmClient()
@@ -49,6 +59,7 @@ void QmClient::browseDevice()
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 
 	resetPointers();
+	disableAll();
 
 	client = new Client(cpeip->text());
 	if(client->browseDevice()) {
@@ -62,13 +73,27 @@ void QmClient::browseDevice()
 		leaves->setModel(leavesModel);
 		leaves->setItemDelegate(&delegate);
 		objects->setModel(treeModel);
+		if(!recents.contains(cpeip->text(), Qt::CaseInsensitive)) {
+			recents << cpeip->text();
+			if(recents.size() > 4)
+				recents.removeFirst();
+
+			QSettings settings;
+			settings.beginWriteArray("recents");
+			for(int i = 0; i < recents.size(); i++) {
+				settings.setArrayIndex(i);
+				settings.setValue("cpeip", recents[i]);
+			}
+			settings.endArray();
+			cpeip->setCompleter(new QCompleter(recents, cpeip));
+		}
 	} else {
 		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());
 		delete client;
 		client = NULL;
 	}
 
-	QApplication::setOverrideCursor(Qt::ArrowCursor);
+	enableAll();
 }
 
 void QmClient::selectedObject(const QModelIndex &index)
@@ -78,8 +103,8 @@ void QmClient::selectedObject(const QModelIndex &index)
 	disableAll();
 
 	leavesModel->loadPath(path);
-	leaves->resizeColumnsToContents();
 	leaves->verticalHeader()->setVisible(leavesModel->enumeration);
+	leaves->resizeColumnsToContents();
 
 	enableAll();
 }
