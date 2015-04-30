@@ -20,15 +20,18 @@
 #define CLIENT_H
 
 #include <QStringList>
+#include <QMutex>
+#include <QTimer>
 
 #include "qssh.h"
 
-class Client
+class Client : private QObject
 {
+Q_OBJECT
 public:
 	Client(QString host);
 
-	QStringList getLines(const QString &cmd);
+	QStringList cmd(const QString &cmd);
 	QStringList getLeaves(const QString &path);
 	QStringList getMd(const QString &path);
 	bool browseDevice();
@@ -44,6 +47,11 @@ private:
 	QString host;
 	QSsh sock;
 	QString e;
+	QMutex io;
+	QTimer keepalive;
+
+private slots:
+	void ping();
 };
 
 #endif

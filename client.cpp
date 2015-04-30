@@ -21,6 +21,7 @@
 Client::Client(QString h)
 {
 	host = h;
+	connect(&keepalive, SIGNAL(timeout()), SLOT(ping()));
 }
 
 static bool obj_compare(const QString &s1, const QString &s2)
@@ -40,8 +41,9 @@ static bool obj_compare(const QString &s1, const QString &s2)
 	return l1.size() < l2.size();
 }
 
-QStringList Client::getLines(const QString &cmd)
+QStringList Client::cmd(const QString &cmd)
 {
+	io.lock();
 	sock.write((cmd + '\n').toUtf8().constData());
 	sock.waitForBytesWritten(-1);
 
@@ -58,6 +60,7 @@ QStringList Client::getLines(const QString &cmd)
 		}
 //		qApp->processEvents();
 	}
+	io.unlock();
 	QStringList ret = QString(buffer).split('\n', QString::SkipEmptyParts);
 	return ret;
 }
@@ -73,51 +76,34 @@ bool Client::browseDevice()
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 	sock.setSocketOption(QAbstractSocket::KeepAliveOption, true);
 
-	objects = getLines("GETO Device.") + getLines("GETO InternetGatewayDevice.");
+	objects = cmd("GETO Device.") + cmd("GETO InternetGatewayDevice.");
 	std::sort(objects.begin(), objects.end(), obj_compare);
+
+	keepalive.start(280000);
 
 	return true;
 }
 
 QStringList Client::getLeaves(const QString &path)
 {
-	QStringList ret = getLines("GETD " + path + ". 0");
+	QStringList ret = cmd("GETD " + path + ". 0");
 	ret.sort();
 	return ret;
 }
 
 QStringList Client::getMd(const QString &path)
 {
-	return getLines("GETMDP " + path + ". 0");
+	return cmd("GETMDP " + path + ". 0");
 }
 
 bool Client::setValue(const QString &leaf, const QString &value)
 {
-	sock.write(("SET" + e + " " + leaf + ' ' + value + '\n').toUtf8().constData());
-	sock.waitForBytesWritten(-1);
-
-	QByteArray buffer;
-	while(true) {
-		QByteArray tmp = sock.readAll();
-		if(!tmp.size())
-			continue;
-
-		buffer += tmp;
-		if(!buffer[buffer.size() - 1]) {
-			buffer.resize(buffer.size() - 1);
-			break;
-		}
-//		qApp->processEvents();
-	}
-	if(buffer.startsWith("OK"))
-		return true;
-
-	return false;
+	return cmd("SET" + e + ' ' + leaf + ' ' + value).contains("OK");
 }
 
 int Client::add(const QString &path)
 {
-	QStringList ret = getLines("ADD" + e + " " + path);
+	QStringList ret = cmd("ADD" + e + " " + path);
 	if(!ret.contains("ERROR")) {
 //		objects << path + '.' + ret[0];
 //		objects.sort();
@@ -129,7 +115,7 @@ int Client::add(const QString &path)
 
 bool Client::del(const QString &path)
 {
-	QStringList ret = getLines("DEL" + e + " " + path);
+	QStringList ret = cmd("DEL" + e + " " + path);
 	if(!ret.contains("ERROR")) {
 		foreach(QString s, objects)
 			if(s.startsWith(path))
@@ -148,11 +134,16 @@ void Client::runHandlers(bool run)
 
 void Client::reset()
 {
-	getLines("RESET");
+	cmd("RESET");
 	sock.close();
 }
 
 void Client::save()
 {
-	getLines("SAVE");
+	cmd("SAVE");
+}
+
+void Client::ping()
+{
+	cmd("GETO Device.[]");
 }
