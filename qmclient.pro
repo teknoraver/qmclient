@@ -11,3 +11,7 @@ LIBS += -lssh2
 
 VER = $$system(grep -m1 -o '[0-9.]*' debian/changelog)
 DEFINES += VERSION=\"\\\"$${VER}\\\"\"
+
+win32 {
+	LIBS += -lcrpyto -static
+}
