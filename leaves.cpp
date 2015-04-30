@@ -69,26 +69,51 @@ void Leaves::loadPath(QString path)
 	foreach(QString leaf, client->getLeaves(path)) {
 		QStringList tokens = leaf.split(';');
 		if(tokens.size() >= 2) {
-			Leaf::Type type = Leaf::String;
+			Leaf leaf(tokens[0], tokens[1]);
+			leaf.type = Leaf::String;
 			QStringList values;
 			foreach(QString s, mdata[tokens[0]]) {
 				if(s == "type:boolean") {
-					type = Leaf::Enum;
-					values << "true" << "false";
-					break;
+					leaf.type = Leaf::Enum;
+					leaf.values << "true" << "false";
 				} else if(s == "type:unsignedInt") {
-					type = Leaf::Number;
-					break;
+					leaf.type = Leaf::Number;
+					leaf.min  = 0;
+					leaf.max  = INT_MAX;
+					leaf.step = 1;
+				} else if(s == "type:int") {
+					leaf.type = Leaf::Number;
+					leaf.min  = INT_MIN;
+					leaf.max  = INT_MAX;
+					leaf.step = 1;
+				} else if(s.startsWith("range:")) {
+					QStringList r = s.split(':');
+					if(r.size() >= 3) {
+						leaf.step = r[2].toInt();
+						r = r[1].split("..");
+						if(r.size() >= 2) {
+							if(r[0] == "*")
+								leaf.min = INT_MIN;
+							else
+								leaf.min = r[0].toInt();
+							if(r[1] == "*")
+								leaf.max = INT_MIN;
+							else
+								leaf.max = r[1].toInt();
+						}
+					}
+				} else if(s.startsWith("units:")) {
+					leaf.units = s.mid(s.indexOf(':') + 1);
 				} else if(s == "type:dateTime") {
-					type = Leaf::Date;
+					leaf.type = Leaf::Date;
 					break;
 				} else if(s.startsWith("type:string")) {
-					type = Leaf::String;
+					leaf.type = Leaf::String;
 				} else if(s.startsWith("enum:")) {
-					type = Leaf::Enum;
-					values << s.mid(s.indexOf(':') + 1);
+					leaf.type = Leaf::Enum;
+					leaf.values << s.mid(s.indexOf(':') + 1);
 				} else if(s.startsWith("pathref:targetParent:")) {
-					type = Leaf::Enum;
+					leaf.type = Leaf::Enum;
 
 					QString ref = s.mid(s.lastIndexOf(':') + 1);
 					if(ref.endsWith('.'))
@@ -107,10 +132,10 @@ void Leaves::loadPath(QString path)
 					ref = ref.remove(".{i}");
 					ref = ref.replace('.', "\\.(\\d+\\.|)");
 					ref = '^' + ref + "\\.\\d+$";
-					values << client->objects.filter(QRegExp(ref));
+					leaf.values << client->objects.filter(QRegExp(ref));
 				}
 			}
-			leaves << Leaf(tokens[0], tokens[1], type, values);
+			leaves << leaf;
 		}
 	}
 	if(!leaves.isEmpty())

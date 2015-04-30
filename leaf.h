@@ -11,13 +11,14 @@ public:
 		Enum
 	};
 
-	Leaf(const QString &n, const QString &v, Type t, QStringList va) :
-				name(n), value(v), type(t), values(va) { }
+	Leaf(const QString &n, const QString &v) : name(n), value(v) { }
 
 	QString name;
 	QString value;
 	Type type;
 	QStringList values;
+	int min, max, step;
+	QString units;
 };
 
 #endif

@@ -33,7 +33,10 @@ QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 	switch(leaf->type) {
 	case Leaf::Number: {
 		QSpinBox *editor = new QSpinBox(parent);
-		editor->setRange(INT_MIN, INT_MAX);
+		editor->setRange(leaf->min, leaf->max);
+		editor->setSingleStep(leaf->step);
+		if(!leaf->units.isEmpty())
+			editor->setSuffix(' ' + leaf->units);
 		return editor;
 	}
 	case Leaf::String: {

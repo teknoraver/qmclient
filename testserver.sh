@@ -90,13 +90,14 @@ getd() {
 	'GETD Device.Firewall. 0')
 		cat <<-'EOF'
 			Device.Firewall.Config;Advanced
-			Device.Firewall.LastChange;1985-01-09T13:37:31+01:00
+			Device.Firewall.LastChange;1985-01-09T13:37:31
 			Device.Firewall.Version;1
 			Device.Firewall.Enable;true
 			Device.Firewall.AdvancedLevel;Device.Firewall.Level.1
 			Device.Firewall.Type;Stateful
 			Device.Firewall.LevelNumberOfEntries;1
 			Device.Firewall.ChainNumberOfEntries;20
+			Device.Firewall.HashSize;800
 		EOF
 		;;
 	*)
@@ -209,6 +210,13 @@ Device.Firewall.Type
 	enum:Stateful
 	enum:Stateless
 	default:Stateful
+	inh_na:-1
+	exprt:1
+Device.Firewall.HashSize
+	access:rw
+	type:int
+	range:500..1000:100
+	units:kb
 	inh_na:-1
 	exprt:1
 EOF
