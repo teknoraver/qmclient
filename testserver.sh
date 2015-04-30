@@ -98,6 +98,7 @@ getd() {
 			Device.Firewall.LevelNumberOfEntries;1
 			Device.Firewall.ChainNumberOfEntries;20
 			Device.Firewall.HashSize;800
+			Device.Firewall.Description;Strainer
 		EOF
 		;;
 	*)
@@ -217,6 +218,12 @@ Device.Firewall.HashSize
 	type:int
 	range:500..1000:100
 	units:kb
+	inh_na:-1
+	exprt:1
+Device.Firewall.Description
+	access:rw
+	type:string:size:0..16
+	default:
 	inh_na:-1
 	exprt:1
 EOF

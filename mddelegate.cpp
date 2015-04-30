@@ -41,6 +41,7 @@ QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 	}
 	case Leaf::String: {
 		QLineEdit *editor = new QLineEdit(parent);
+		editor->setMaxLength(leaf->max);
 		return editor;
 	}
 	case Leaf::Enum: {

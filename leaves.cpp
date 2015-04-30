@@ -109,6 +109,10 @@ void Leaves::loadPath(QString path)
 					break;
 				} else if(s.startsWith("type:string")) {
 					leaf.type = Leaf::String;
+					leaf.max = INT_MAX;
+					QStringList r = s.split("..");
+					if(r.size() > 1)
+						leaf.max = r[1].toInt();
 				} else if(s.startsWith("enum:")) {
 					leaf.type = Leaf::Enum;
 					leaf.values << s.mid(s.indexOf(':') + 1);
