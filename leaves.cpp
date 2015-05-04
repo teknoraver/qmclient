@@ -76,6 +76,7 @@ void Leaves::loadPath(QString path)
 				if(s == "type:boolean") {
 					leaf.type = Leaf::Enum;
 					leaf.values << "true" << "false";
+					break;
 				} else if(s == "type:unsignedInt") {
 					leaf.type = Leaf::Number;
 					leaf.min  = 0;
@@ -113,6 +114,10 @@ void Leaves::loadPath(QString path)
 					QStringList r = s.split("..");
 					if(r.size() > 1)
 						leaf.max = r[1].toInt();
+				} else if(s.startsWith("list:")) {
+					leaf.type = Leaf::String;
+					leaf.max = INT_MAX;
+					break;
 				} else if(s.startsWith("enum:")) {
 					leaf.type = Leaf::Enum;
 					leaf.values << s.mid(s.indexOf(':') + 1);
