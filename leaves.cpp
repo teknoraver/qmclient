@@ -82,26 +82,24 @@ void Leaves::loadPath(QString path)
 					leaf.min  = 0;
 					leaf.max  = INT_MAX;
 					leaf.step = 1;
+					leaf.sign = false;
 				} else if(s == "type:int") {
 					leaf.type = Leaf::Number;
 					leaf.min  = INT_MIN;
 					leaf.max  = INT_MAX;
 					leaf.step = 1;
+					leaf.sign = true;
 				} else if(s.startsWith("range:")) {
-					QStringList r = s.split(':');
-					if(r.size() >= 3) {
-						leaf.step = r[2].toInt();
-						r = r[1].split("..");
-						if(r.size() >= 2) {
-							if(r[0] == "*")
-								leaf.min = INT_MIN;
-							else
-								leaf.min = r[0].toInt();
-							if(r[1] == "*")
-								leaf.max = INT_MIN;
-							else
-								leaf.max = r[1].toInt();
+					QVector<QStringRef> r = s.splitRef(QRegExp("(:|\\.\\.)"));
+					if(r.size() >= 4) {
+						if(!leaf.range) {
+							leaf.min = INT_MAX;
+							leaf.max = INT_MIN;
+							leaf.range = true;
 						}
+						leaf.min = r[1] == "*" ? (leaf.sign ? INT_MIN : 0) : qMin(leaf.min, r[1].toInt());
+						leaf.max = r[2] == "*" ? INT_MAX : qMax(leaf.max, r[2].toInt());
+						leaf.step = r[3].toInt();
 					}
 				} else if(s.startsWith("units:")) {
 					leaf.units = s.mid(s.indexOf(':') + 1);
@@ -110,10 +108,8 @@ void Leaves::loadPath(QString path)
 					break;
 				} else if(s.startsWith("type:string")) {
 					leaf.type = Leaf::String;
-					leaf.max = INT_MAX;
-					QStringList r = s.split("..");
-					if(r.size() > 1)
-						leaf.max = r[1].toInt();
+					QVector<QStringRef> r = s.splitRef("..");
+					leaf.max = r.size() > 1 ? r[1].toInt() : INT_MAX;
 				} else if(s.startsWith("list:")) {
 					leaf.type = Leaf::String;
 					leaf.max = INT_MAX;
