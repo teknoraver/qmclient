@@ -90,7 +90,7 @@ void Leaves::loadPath(QString path)
 					leaf.step = 1;
 					leaf.sign = true;
 				} else if(s.startsWith("range:")) {
-					QVector<QStringRef> r = s.splitRef(QRegExp("(:|\\.\\.)"));
+					QStringList r = s.split(QRegExp("(:|\\.\\.)"));
 					if(r.size() >= 4) {
 						if(!leaf.range) {
 							leaf.min = INT_MAX;
@@ -108,7 +108,7 @@ void Leaves::loadPath(QString path)
 					break;
 				} else if(s.startsWith("type:string")) {
 					leaf.type = Leaf::String;
-					QVector<QStringRef> r = s.splitRef("..");
+					QStringList r = s.split("..");
 					leaf.max = r.size() > 1 ? r[1].toInt() : INT_MAX;
 				} else if(s.startsWith("list:")) {
 					leaf.type = Leaf::String;

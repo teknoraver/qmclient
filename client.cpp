@@ -27,12 +27,12 @@ Client::Client(QString h)
 static bool obj_compare(const QString &s1, const QString &s2)
 {
 	static QRegExp num("\\d+");
-	QVector<QStringRef> l1 = s1.splitRef('.');
-	QVector<QStringRef> l2 = s2.splitRef('.');
+	QStringList l1 = s1.split('.');
+	QStringList l2 = s2.split('.');
 
 	for(int i = 0; i < qMin(l1.size(), l2.size()); i++)
 		if(l1[i] != l2[i]) {
-			if(num.exactMatch(l1[i].toString()) && num.exactMatch(l2[i].toString()))
+			if(num.exactMatch(l1[i]) && num.exactMatch(l2[i]))
 				return l1[i].toInt() < l2[i].toInt();
 			else
 				return l1[i] < l2[i];
