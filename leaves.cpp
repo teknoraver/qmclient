@@ -127,15 +127,16 @@ void Leaves::loadPath(QString path)
 					if(ref.startsWith('.'))
 						ref = tokens[0].mid(0, tokens[0].indexOf('.')) + ref;
 					else if(ref.startsWith('#')) {
-						QString unenum = path.remove(QRegExp("\\.\\d+"));
+						QString unenum = path;
+						unenum.remove(QRegExp("\\.\\d+"));
 						QString basename = ref.mid(ref.lastIndexOf('#') + 1);
 						QStringList pathlist = unenum.split('.');
 						int hashes = qMin(pathlist.size(), ref.count('#'));
 						ref = QStringList(pathlist.mid(0, pathlist.size() - hashes)).join(".") + basename;
 					}
 
-					ref = ref.remove(".{i}");
-					ref = ref.replace('.', "\\.(\\d+\\.|)");
+					ref.remove(".{i}");
+					ref.replace('.', "\\.(\\d+\\.|)");
 					ref = '^' + ref + "\\.\\d+$";
 					leaf.values << client->objects.filter(QRegExp(ref));
 				}
