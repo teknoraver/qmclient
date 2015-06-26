@@ -26,6 +26,9 @@
         <property name="contextMenuPolicy">
          <enum>Qt::CustomContextMenu</enum>
         </property>
+        <property name="verticalScrollMode">
+         <enum>QAbstractItemView::ScrollPerPixel</enum>
+        </property>
         <attribute name="headerVisible">
          <bool>false</bool>
         </attribute>
