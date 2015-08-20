@@ -25,7 +25,7 @@
 
 #include "qssh.h"
 
-class Client : private QObject
+class Client : public QObject
 {
 Q_OBJECT
 public:
@@ -50,6 +50,9 @@ private:
 	QString e;
 	QMutex io;
 	QTimer keepalive;
+
+signals:
+	void disconnected();
 
 private slots:
 	void ping();

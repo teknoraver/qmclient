@@ -14,6 +14,7 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 		goto close_sock;
 
 	libssh2_session_set_blocking(session, 1);
+	libssh2_session_set_timeout(session, 5000);
 
 	if (libssh2_session_startup(session, socketDescriptor()))
 		goto free_sess;
@@ -50,13 +51,18 @@ qint64 QSsh::write(const char *data) const
 	return libssh2_channel_write(channel, data, qstrlen(data));
 }
 
-QByteArray QSsh::readAll() const
+QByteArray QSsh::readAll()
 {
 	QByteArray ret;
 
 	while(true) {
 		char buffer[16384];
 		qint64 readed = libssh2_channel_read(channel, buffer, sizeof(buffer));
+
+		if(readed < 0) {
+			abort();
+			break;
+		}
 
 		if(readed > 0)
 			ret.append(buffer, readed);

@@ -50,6 +50,12 @@ QStringList Client::cmd(const QString &cmd)
 	QByteArray buffer;
 	while(true) {
 		QByteArray tmp = sock.readAll();
+
+		if(sock.state() == QAbstractSocket::UnconnectedState) {
+			emit disconnected();
+			break;
+		}
+
 		if(!tmp.size())
 			continue;
 

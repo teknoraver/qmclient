@@ -59,6 +59,7 @@ private slots:
 	void cmReset();
 	void cmSave() const;
 	void cmReboot();
+	void disconnected();
 	void about();
 };
 

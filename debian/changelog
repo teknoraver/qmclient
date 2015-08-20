@@ -1,3 +1,9 @@
+qmclient (1.4.1) unstable; urgency=medium
+
+  * FIx hang on disconnect
+
+ -- Matteo Croce <matteo@openwrt.org>  Mon, 31 Aug 2015 09:53:42 +0200
+
 qmclient (1.4) unstable; urgency=medium
 
   * Support ranges

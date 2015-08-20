@@ -68,6 +68,7 @@ void QmClient::browseDevice()
 		leavesModel = new Leaves(client);
 		connect(leavesModel, SIGNAL(dataAboutToBeChanged()), SLOT(disableAll()));
 		connect(leavesModel, dataChangedQtx(), SLOT(enableAll()));
+		connect(client, SIGNAL(disconnected()), SLOT(disconnected()));
 		treeModel = new TreeModel(client, this);
 
 		client->runHandlers(actionHandlers->isChecked());
@@ -105,8 +106,10 @@ void QmClient::selectedObject(const QModelIndex &index)
 	disableAll();
 
 	leavesModel->loadPath(path);
-	leaves->verticalHeader()->setVisible(leavesModel->enumeration);
-	leaves->resizeColumnsToContents();
+	if(leavesModel) {
+		leaves->verticalHeader()->setVisible(leavesModel->enumeration);
+		leaves->resizeColumnsToContents();
+	}
 
 	enableAll();
 }
@@ -263,6 +266,12 @@ void QmClient::resetPointers()
 		delete treeModel;
 		treeModel = NULL;
 	}
+}
+
+void QmClient::disconnected()
+{
+	QMessageBox::critical(this, "Error", "Network error");
+	enableAll();
 }
 
 void QmClient::disableAll() const
