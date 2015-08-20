@@ -58,6 +58,7 @@ private slots:
 	void enableAll() const;
 	void cmReset();
 	void cmSave() const;
+	void cmReboot();
 	void about();
 };
 

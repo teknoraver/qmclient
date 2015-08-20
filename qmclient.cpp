@@ -37,6 +37,7 @@ QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
 	connect(actionHandlers, SIGNAL(toggled(bool)), SLOT(runHandlers(bool)));
 	connect(actionCmReset, SIGNAL(triggered()), SLOT(cmReset()));
 	connect(actionCmSave, SIGNAL(triggered()), SLOT(cmSave()));
+	connect(actionCmReboot, SIGNAL(triggered()), SLOT(cmReboot()));
 
 	setClearButton(search);
 
@@ -237,6 +238,14 @@ void QmClient::cmSave() const
 		disableAll();
 		client->save();
 		enableAll();
+	}
+}
+
+void QmClient::cmReboot()
+{
+	if(client) {
+		client->reset();
+		resetPointers();
 	}
 }
 

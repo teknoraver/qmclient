@@ -120,6 +120,7 @@
     <addaction name="actionHandlers"/>
     <addaction name="actionCmReset"/>
     <addaction name="actionCmSave"/>
+    <addaction name="actionCmReboot"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu">
@@ -196,6 +197,15 @@
    </property>
    <property name="text">
     <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionCmReboot">
+   <property name="icon">
+    <iconset resource="qmclient.qrc">
+     <normaloff>:/icons/reboot.png</normaloff>:/icons/reboot.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reboot</string>
    </property>
   </action>
  </widget>

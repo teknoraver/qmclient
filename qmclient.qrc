@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/reboot.png</file>
     <file>icons/copy.png</file>
     <file>icons/search.png</file>
     <file>icons/add.png</file>

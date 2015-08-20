@@ -143,6 +143,11 @@ void Client::save()
 	cmd("SAVE");
 }
 
+void Client::reboot()
+{
+	cmd("REBOOT");
+}
+
 void Client::ping()
 {
 	cmd("GETO Device.[]");

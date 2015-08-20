@@ -40,6 +40,7 @@ public:
 	bool del(const QString &path);
 	void reset();
 	void save();
+	void reboot();
 	void runHandlers(bool run);
 
 	QStringList objects;
