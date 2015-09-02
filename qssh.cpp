@@ -2,7 +2,7 @@
 
 #include "qssh.h"
 
-bool QSsh::connectToHost(const QString &user, const QString &pass, const QString &hostName, quint16 port)
+bool QSsh::connectToHost(const QString &user, const QString &pass, const QString &cmd, const QString &hostName, quint16 port)
 {
 	QTcpSocket::connectToHost(hostName, port);
 
@@ -22,12 +22,13 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 	if (libssh2_userauth_password(session, user.toUtf8().constData(), pass.toUtf8().constData()))
 		goto disc_sess;
 
-	channel = libssh2_channel_direct_tcpip(session, "127.0.0.1", 9034);
+	channel = libssh2_channel_open_session(session);
 
 	if(channel == NULL)
 		goto free_chan;
 
-	return true;
+	if(!libssh2_channel_exec(channel, cmd.toUtf8().constData()))
+		return true;
 
 free_chan:
 	libssh2_channel_free(channel);

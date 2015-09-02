@@ -76,7 +76,8 @@ bool Client::browseDevice()
 	if(sock.state() != QAbstractSocket::UnconnectedState)
 		sock.close();
 
-	if(!sock.connectToHost("root", "yaps", host))
+	sock.connectToHost("root", "yaps", "exec nc local:/tmp/cmctl", host);
+	if(!sock.waitForConnected(2000))
 		return false;
 
 	sock.setSocketOption(QAbstractSocket::LowDelayOption, 1);
