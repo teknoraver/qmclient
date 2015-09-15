@@ -247,7 +247,7 @@ void QmClient::cmSave() const
 void QmClient::cmReboot()
 {
 	if(client) {
-		client->reset();
+		client->reboot();
 		resetPointers();
 	}
 }
