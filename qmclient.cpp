@@ -286,7 +286,8 @@ void QmClient::enableAll() const
 {
 	leaves->setEnabled(true);
 	objects->setEnabled(true);
-	QApplication::setOverrideCursor(Qt::ArrowCursor);
+	QApplication::restoreOverrideCursor();
+	QApplication::restoreOverrideCursor();
 }
 
 void QmClient::about()
