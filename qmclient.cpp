@@ -102,6 +102,7 @@ void QmClient::browseDevice()
 void QmClient::selectedObject(const QModelIndex &index)
 {
 	QString path = getFullPath(index);
+	statusbar->showMessage(path);
 
 	disableAll();
 
