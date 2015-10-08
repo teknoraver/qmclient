@@ -44,7 +44,7 @@ static bool obj_compare(const QString &s1, const QString &s2)
 QStringList Client::cmd(const QString &cmd)
 {
 	io.lock();
-	sock.write((cmd + '\n').toUtf8().constData());
+	sock.write((cmd + '\n' + '\0').toUtf8());
 	sock.waitForBytesWritten(-1);
 
 	QByteArray buffer;
