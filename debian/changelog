@@ -1,3 +1,9 @@
+qmclient (1.4.3) unstable; urgency=medium
+
+  * null terminate strings
+
+ -- Matteo Croce <matteo@openwrt.org>  Thu, 08 Oct 2015 17:47:20 +0200
+
 qmclient (1.4.2) unstable; urgency=medium
 
   * fix cursor handling
