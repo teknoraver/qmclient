@@ -5,6 +5,7 @@
 bool QSsh::connectToHost(const QString &user, const QString &pass, const QString &cmd, const QString &hostName, quint16 port)
 {
 	QTcpSocket::connectToHost(hostName, port);
+	waitForConnected(3000);
 
 	session = NULL;
 	channel = NULL;
