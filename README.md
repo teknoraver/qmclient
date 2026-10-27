@@ -5,6 +5,8 @@ QmClient is a graphical tool to browse and edit the configuration of Pirelli/ADB
 It talks to the cm daemon of the CPE over SSH,
 so there is no need to recompile cm or to relay it manually.
 
+<p align="center"><img src="https://github.com/user-attachments/assets/0c486235-6e3d-4e5e-8ac0-7dad8143ee66" alt="QmClient main window" width="677"></p>
+
 ## Build
 
 Requirements: CMake 3.19 or newer, Qt 6 (Widgets, Network) and libssh2.
