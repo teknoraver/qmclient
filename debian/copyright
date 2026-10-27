@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: qmclient
-Source: https://bitbucket.org/teknoraver/qmclient
+Source: https://github.com/teknoraver/qmclient
 
 Files: *
 Copyright: 2015 Matteo Croce <matteo@openwrt.org>

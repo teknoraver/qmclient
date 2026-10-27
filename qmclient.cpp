@@ -294,5 +294,5 @@ void QmClient::enableAll() const
 
 void QmClient::about()
 {
-	QMessageBox::about(this, "About QmClient", "QmClient " VERSION " - a Qt browser for Pirelli/ADB devices<br>by <a href=\"mailto:matteo@openwrt.org\">Matteo Croce</a>");
+	QMessageBox::about(this, "About QmClient", "QmClient " VERSION " - a Qt browser for Pirelli/ADB devices<br>by Matteo Croce <a href=\"https://matteocroce.it/\">https://matteocroce.it/</a>");
 }
