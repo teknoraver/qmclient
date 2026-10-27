@@ -1,7 +1,7 @@
 Source: qmclient
 Section: misc
 Priority: optional
-Maintainer: Matteo Croce <matteo@openwrt.org>
+Maintainer: Matteo Croce <technoboy85@gmail.com>
 Build-Depends: debhelper-compat (= 13), cmake, qt6-base-dev, libssh2-1-dev, pkgconf
 Standards-Version: 3.9.6
 Homepage: https://github.com/teknoraver/qmclient
