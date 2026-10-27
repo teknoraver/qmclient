@@ -23,7 +23,6 @@
 
 #include "ui_qmclientwidget.h"
 
-#include "compat.h"
 #include "treemodel.h"
 #include "leaves.h"
 #include "client.h"
@@ -34,7 +33,7 @@ class QmClient: public QMainWindow, private Ui::MainWindow
 Q_OBJECT
 public:
 	QmClient();
-	~QmClient();
+	~QmClient() override;
 
 private:
 	Client *client;

@@ -38,13 +38,13 @@ signals:
 	void dataAboutToBeChanged();
 
 private:
-	int rowCount(const QModelIndex&) const;
-	int columnCount(const QModelIndex&) const;
-	QVariant data(const QModelIndex&, int) const;
-	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-	Qt::ItemFlags flags(const QModelIndex &index) const;
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	int rowCount(const QModelIndex&) const override;
+	int columnCount(const QModelIndex&) const override;
+	QVariant data(const QModelIndex&, int) const override;
+	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+	Qt::ItemFlags flags(const QModelIndex &index) const override;
+	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 	QList<Leaf> leaves;
 	Client *client;

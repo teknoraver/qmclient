@@ -7,8 +7,8 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 	QTcpSocket::connectToHost(hostName, port);
 	waitForConnected(3000);
 
-	session = NULL;
-	channel = NULL;
+	session = nullptr;
+	channel = nullptr;
 
 	session = libssh2_session_init();
 	if(!session)
@@ -17,7 +17,7 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 	libssh2_session_set_blocking(session, 1);
 	libssh2_session_set_timeout(session, 5000);
 
-	if (libssh2_session_startup(session, socketDescriptor()))
+	if (libssh2_session_handshake(session, socketDescriptor()))
 		goto free_sess;
 
 	if (libssh2_userauth_password(session, user.toUtf8().constData(), pass.toUtf8().constData()))
@@ -25,7 +25,7 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 
 	channel = libssh2_channel_open_session(session);
 
-	if(channel == NULL)
+	if(channel == nullptr)
 		goto free_chan;
 
 	if(!libssh2_channel_exec(channel, cmd.toUtf8().constData()))
@@ -33,14 +33,14 @@ bool QSsh::connectToHost(const QString &user, const QString &pass, const QString
 
 free_chan:
 	libssh2_channel_free(channel);
-	channel = NULL;
+	channel = nullptr;
 
 disc_sess:
 	libssh2_session_disconnect(session, "quit");
 
 free_sess:
 	libssh2_session_free(session);
-	session = NULL;
+	session = nullptr;
 
 close_sock:
 	QTcpSocket::close();

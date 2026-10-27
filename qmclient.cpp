@@ -23,23 +23,23 @@
 
 #include "qmclient.h"
 
-QmClient::QmClient() : client(0), leavesModel(0), treeModel(0)
+QmClient::QmClient() : client(nullptr), leavesModel(nullptr), treeModel(nullptr)
 {
 	setupUi(this);
-	connect(actionAbout, SIGNAL(triggered()), SLOT(about()));
-	connect(actionAbout_Qt, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(aboutQt()));
-	connect(objects, SIGNAL(clicked(const QModelIndex&)), SLOT(selectedObject(const QModelIndex&)));
-	connect(browse, SIGNAL(clicked()), SLOT(browseDevice()));
-	connect(search, SIGNAL(textChanged(const QString&)), SLOT(doSearch(const QString&)));
-	connect(searchType, SIGNAL(currentIndexChanged(int)), SLOT(changeSearch()));
-	connect(leaves, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(leavesMenu(const QPoint&)));
-	connect(objects, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(objectsMenu(const QPoint&)));
-	connect(actionHandlers, SIGNAL(toggled(bool)), SLOT(runHandlers(bool)));
-	connect(actionCmReset, SIGNAL(triggered()), SLOT(cmReset()));
-	connect(actionCmSave, SIGNAL(triggered()), SLOT(cmSave()));
-	connect(actionCmReboot, SIGNAL(triggered()), SLOT(cmReboot()));
+	connect(actionAbout, &QAction::triggered, this, &QmClient::about);
+	connect(actionAbout_Qt, &QAction::triggered, qApp, &QApplication::aboutQt);
+	connect(objects, &QAbstractItemView::clicked, this, &QmClient::selectedObject);
+	connect(browse, &QAbstractButton::clicked, this, &QmClient::browseDevice);
+	connect(search, &QLineEdit::textChanged, this, &QmClient::doSearch);
+	connect(searchType, &QComboBox::currentIndexChanged, this, &QmClient::changeSearch);
+	connect(leaves, &QWidget::customContextMenuRequested, this, &QmClient::leavesMenu);
+	connect(objects, &QWidget::customContextMenuRequested, this, &QmClient::objectsMenu);
+	connect(actionHandlers, &QAction::toggled, this, &QmClient::runHandlers);
+	connect(actionCmReset, &QAction::triggered, this, &QmClient::cmReset);
+	connect(actionCmSave, &QAction::triggered, this, &QmClient::cmSave);
+	connect(actionCmReboot, &QAction::triggered, this, &QmClient::cmReboot);
 
-	setClearButton(search);
+	search->setClearButtonEnabled(true);
 
 	QSettings settings;
 	int size = settings.beginReadArray("recents");
@@ -66,9 +66,9 @@ void QmClient::browseDevice()
 	client = new Client(cpeip->text());
 	if(client->browseDevice()) {
 		leavesModel = new Leaves(client);
-		connect(leavesModel, SIGNAL(dataAboutToBeChanged()), SLOT(disableAll()));
-		connect(leavesModel, dataChangedQtx(), SLOT(enableAll()));
-		connect(client, SIGNAL(disconnected()), SLOT(disconnected()));
+		connect(leavesModel, &Leaves::dataAboutToBeChanged, this, &QmClient::disableAll);
+		connect(leavesModel, &QAbstractItemModel::dataChanged, this, &QmClient::enableAll);
+		connect(client, &Client::disconnected, this, &QmClient::disconnected);
 		treeModel = new TreeModel(client, this);
 
 		client->runHandlers(actionHandlers->isChecked());
@@ -93,7 +93,7 @@ void QmClient::browseDevice()
 	} else {
 		QMessageBox::critical(this, "Error", "Can't connect to " + cpeip->text());
 		delete client;
-		client = NULL;
+		client = nullptr;
 	}
 
 	enableAll();
@@ -132,22 +132,23 @@ void QmClient::doSearch(const QString &text)
 		return;
 
 	if(text.isEmpty()) {
-		treeModel->filter(QRegExp());
+		treeModel->filter(QRegularExpression());
 		objects->collapseAll();
 		return;
 	}
 
-	QRegExp::PatternSyntax ps;
+	QString pattern;
 	switch(searchType->currentIndex()) {
 	default:
-	case 0:	ps = QRegExp::FixedString;
+	case 0:	pattern = QRegularExpression::escape(text);
 		break;
-	case 1:	ps = QRegExp::WildcardUnix;
+	case 1:	pattern = QRegularExpression::wildcardToRegularExpression(text,
+			QRegularExpression::UnanchoredWildcardConversion | QRegularExpression::NonPathWildcardConversion);
 		break;
-	case 2:	ps = QRegExp::RegExp;
+	case 2:	pattern = text;
 		break;
 	}
-	treeModel->filter(QRegExp(text, Qt::CaseInsensitive, ps));
+	treeModel->filter(QRegularExpression(pattern, QRegularExpression::CaseInsensitiveOption));
 	objects->expandAll();
 }
 
@@ -169,7 +170,7 @@ void QmClient::leavesMenu(const QPoint &point) const
 	QAction *copyAct = new QAction(QIcon(":icons/copy.png"), "&Copy path", &menu);
 	menu.addAction(copyAct);
 
-	QAction *searchAct = NULL;
+	QAction *searchAct = nullptr;
 	if(val.startsWith("Device.") || val.startsWith("InternetGatewayDevice.")) {
 		searchAct = new QAction(QIcon(":icons/search.png"), "&Search " + val, &menu);
 		menu.addAction(searchAct);
@@ -257,15 +258,15 @@ void QmClient::resetPointers()
 {
 	if(client) {
 		delete client;
-		client = NULL;
+		client = nullptr;
 	}
 	if(leavesModel) {
 		delete leavesModel;
-		leavesModel = NULL;
+		leavesModel = nullptr;
 	}
 	if(treeModel) {
 		delete treeModel;
-		treeModel = NULL;
+		treeModel = nullptr;
 	}
 }
 

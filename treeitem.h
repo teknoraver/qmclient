@@ -26,7 +26,7 @@
 class TreeItem
 {
 public:
-	TreeItem(const QString &data, TreeItem *parentItem = 0);
+	TreeItem(const QString &data, TreeItem *parentItem = nullptr);
 	~TreeItem();
 
 	void appendChild(TreeItem *child);

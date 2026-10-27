@@ -78,13 +78,13 @@ TreeItem* TreeItem::find(QStringList path)
 	if(path.isEmpty())
 		return this;
 
-	foreach(TreeItem *child, m_childItems)
+	for(TreeItem *child : std::as_const(m_childItems))
 		if(child->m_itemData == path[0]) {
 			path.removeFirst();
 			return child->find(path);
 		}
 
-	return NULL;
+	return nullptr;
 }
 
 QString TreeItem::path() const

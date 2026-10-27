@@ -21,7 +21,7 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
-TreeModel::TreeModel(Client *c, QObject *parent) : QAbstractItemModel(parent), rootItem(NULL)
+TreeModel::TreeModel(Client *c, QObject *parent) : QAbstractItemModel(parent), rootItem(nullptr)
 {
 	client = c;
 	setupModelData(client->objects);
@@ -53,7 +53,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid())
-		return 0;
+		return Qt::NoItemFlags;
 
 	return QAbstractItemModel::flags(index);
 }
@@ -134,10 +134,12 @@ void TreeModel::add(const QString &lineData, int position, QList<TreeItem *> &pa
 	parents.last()->appendChild(new TreeItem(lineData));
 }
 
-void TreeModel::filter(const QRegExp &filter)
+void TreeModel::filter(const QRegularExpression &filter)
 {
-	if(filter.isEmpty())
+	if(filter.pattern().isEmpty())
 		setupModelData(client->objects);
+	else if(!filter.isValid())
+		setupModelData(QStringList());
 	else
 		setupModelData(client->objects.filter(filter));
 }
@@ -193,7 +195,7 @@ void TreeModel::setupModelData(const QStringList &lines)
 		if (lines[number].isEmpty() || lines[number][0] == '#')
 			continue;
 
-		QStringList tokens = lines[number].split('.', QString::SkipEmptyParts);
+		QStringList tokens = lines[number].split('.', Qt::SkipEmptyParts);
 		for(int i = 0; i < tokens.size(); i++)
 			if(!rootItem->find(tokens.mid(0, i + 1)))
 				add(tokens[i], i, parents, indentations);

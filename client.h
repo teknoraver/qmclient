@@ -20,6 +20,7 @@
 #define CLIENT_H
 
 #include <QStringList>
+#include <QRegularExpression>
 #include <QMutex>
 #include <QTimer>
 

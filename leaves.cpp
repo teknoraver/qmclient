@@ -43,11 +43,12 @@ QVariant Leaves::data(const QModelIndex &index, int role) const
 		case 0: return l.name.mid(l.name.lastIndexOf('.') + 1);
 		case 1: return l.value;
 		}
+		break;
 	case Qt::UserRole:
 		return l.name;
 	}
 
-	return QVariant::Invalid;
+	return QVariant();
 }
 
 void Leaves::loadPath(QString path)
@@ -57,7 +58,7 @@ void Leaves::loadPath(QString path)
 	QHash<QString, QStringList> mdata;
 	QStringList md = client->getMd(path);
 	QString last;
-	foreach(QString line, md) {
+	for(const QString &line : std::as_const(md)) {
 		if(line.startsWith('	'))
 			mdata[last] << line.trimmed();
 		else {
@@ -66,13 +67,13 @@ void Leaves::loadPath(QString path)
 		}
 	}
 
-	foreach(QString leaf, client->getLeaves(path)) {
+	for(const QString &leaf : client->getLeaves(path)) {
 		QStringList tokens = leaf.split(';');
 		if(tokens.size() >= 2) {
 			Leaf leaf(tokens[0], tokens[1]);
 			leaf.type = Leaf::String;
 			QStringList values;
-			foreach(QString s, mdata[tokens[0]]) {
+			for(const QString &s : std::as_const(mdata[tokens[0]])) {
 				if(s == "type:boolean") {
 					leaf.type = Leaf::Enum;
 					leaf.values << "true" << "false";
@@ -90,7 +91,7 @@ void Leaves::loadPath(QString path)
 					leaf.step = 1;
 					leaf.sign = true;
 				} else if(s.startsWith("range:")) {
-					QStringList r = s.split(QRegExp("(:|\\.\\.)"));
+					QStringList r = s.split(QRegularExpression("(:|\\.\\.)"));
 					if(r.size() >= 4) {
 						if(!leaf.range) {
 							leaf.min = INT_MAX;
@@ -128,7 +129,7 @@ void Leaves::loadPath(QString path)
 						ref = tokens[0].mid(0, tokens[0].indexOf('.')) + ref;
 					else if(ref.startsWith('#')) {
 						QString unenum = path;
-						unenum.remove(QRegExp("\\.\\d+"));
+						unenum.remove(QRegularExpression("\\.\\d+"));
 						QString basename = ref.mid(ref.lastIndexOf('#') + 1);
 						QStringList pathlist = unenum.split('.');
 						int hashes = qMin(pathlist.size(), ref.count('#'));
@@ -138,7 +139,7 @@ void Leaves::loadPath(QString path)
 					ref.remove(".{i}");
 					ref.replace('.', "\\.(\\d+\\.|)");
 					ref = '^' + ref + "\\.\\d+$";
-					leaf.values << client->objects.filter(QRegExp(ref));
+					leaf.values << client->objects.filter(QRegularExpression(ref));
 				}
 			}
 			leaves << leaf;
@@ -183,7 +184,7 @@ bool Leaves::setData(const QModelIndex &index, const QVariant &value, int)
 QVariant Leaves::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if(role != Qt::DisplayRole)
-		return QVariant::Invalid;
+		return QVariant();
 
 	if(orientation == Qt::Horizontal) {
 		if(!section)
@@ -198,5 +199,5 @@ QVariant Leaves::headerData(int section, Qt::Orientation orientation, int role) 
 		}
 	}
 
-	return QVariant::Invalid;
+	return QVariant();
 }

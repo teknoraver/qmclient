@@ -21,18 +21,18 @@
 Client::Client(QString h)
 {
 	host = h;
-	connect(&keepalive, SIGNAL(timeout()), SLOT(ping()));
+	connect(&keepalive, &QTimer::timeout, this, &Client::ping);
 }
 
 static bool obj_compare(const QString &s1, const QString &s2)
 {
-	static QRegExp num("\\d+");
+	static const QRegularExpression num(QRegularExpression::anchoredPattern("\\d+"));
 	QStringList l1 = s1.split('.');
 	QStringList l2 = s2.split('.');
 
 	for(int i = 0; i < qMin(l1.size(), l2.size()); i++)
 		if(l1[i] != l2[i]) {
-			if(num.exactMatch(l1[i]) && num.exactMatch(l2[i]))
+			if(num.match(l1[i]).hasMatch() && num.match(l2[i]).hasMatch())
 				return l1[i].toInt() < l2[i].toInt();
 			else
 				return l1[i] < l2[i];
@@ -67,7 +67,7 @@ QStringList Client::cmd(const QString &cmd)
 //		qApp->processEvents();
 	}
 	io.unlock();
-	QStringList ret = QString(buffer).split('\n', QString::SkipEmptyParts);
+	QStringList ret = QString(buffer).split('\n', Qt::SkipEmptyParts);
 	return ret;
 }
 
@@ -124,9 +124,7 @@ bool Client::del(const QString &path)
 {
 	QStringList ret = cmd("DEL" + e + " " + path);
 	if(!ret.contains("ERROR")) {
-		foreach(QString s, objects)
-			if(s.startsWith(path))
-				objects.removeOne(s);
+		objects.removeIf([&path](const QString &s) { return s.startsWith(path); });
 		return true;
 	}
 	return false;

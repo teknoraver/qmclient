@@ -56,7 +56,7 @@ QWidget* MetaDataDelegate::createEditor(QWidget *parent,
 	}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void MetaDataDelegate::setEditorData(QWidget *edit, const QModelIndex &index) const
