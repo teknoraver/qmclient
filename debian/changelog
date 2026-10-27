@@ -1,3 +1,10 @@
+qmclient (1.5.0) unstable; urgency=medium
+
+  * port to Qt6
+  * switch build system to CMake
+
+ -- Matteo Croce <technoboy85@gmail.com>  Tue, 27 Oct 2026 12:03:45 +0100
+
 qmclient (1.4.3) unstable; urgency=medium
 
   * null terminate strings

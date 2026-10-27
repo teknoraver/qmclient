@@ -2,15 +2,16 @@ QmClient
 --------
 
 QmClient is graphic tool to browse the configuration of Pirelli/ADB Routers.
-QmClient is written with the Qt framework (version 4 or 5) to be
+QmClient is written with the Qt 6 framework to be
 platform independent, both Linux and Windows are supported (OS X coming soon).
 
 QmClient connects to the CPE cm daemon with a tunneled SSH connection,
 there is no need to recompile cm or do manual relaying from cm.
 
-Prerequisites to build QmClient are "libssh2-1-dev libqt4-dev qt4-qmake" for Qt4,
-"libssh2-1-dev qtbase5-dev qt5-qmake" if you want to build with Qt5.
-Compilation is straightforward as "qmake ; make"
+Prerequisites to build QmClient are CMake, Qt 6 and libssh2
+("cmake qt6-base-dev libssh2-1-dev" on Debian/Ubuntu,
+"cmake qt6-qtbase-devel libssh2-devel" on Fedora).
+Compilation is straightforward as "cmake -B build ; cmake --build build"
 
 If you're running Qt on Unbuntu with Gnome3 or KDE, perhaps you won't see
 Menu Bar. If this is the case, it's a bug in appmenu-qt5, try this workaround
