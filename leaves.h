@@ -32,7 +32,7 @@ Q_OBJECT
 public:
 	Leaves(Client *c);
 	void loadPath(QString path);
-	bool enumeration;
+	bool enumeration = false;
 
 signals:
 	void dataAboutToBeChanged();

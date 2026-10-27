@@ -1,6 +1,8 @@
 #ifndef LEAF_H
 #define LEAF_H
 
+#include <climits>
+
 class Leaf
 {
 public:
@@ -15,7 +17,11 @@ public:
 		name(n),
 		value(v),
 		type(String),
-		range(false) { }
+		sign(false),
+		range(false),
+		min(0),
+		max(INT_MAX),
+		step(1) { }
 
 	QString name;
 	QString value;
