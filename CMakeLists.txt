@@ -10,6 +10,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBSSH2 REQUIRED IMPORTED_TARGET libssh2)
 qt_standard_project_setup()
+set(CMAKE_AUTORCC ON)
 
 qt_add_executable(qmclient WIN32 MACOSX_BUNDLE
 	main.cpp
